@@ -1,0 +1,10 @@
+{
+  "c1000": {
+    "catalog_size": 1000,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  },
+  "legacy300": {
+    "catalog_size": 300,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  }
+}

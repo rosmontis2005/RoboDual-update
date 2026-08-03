@@ -1,0 +1,8 @@
+{
+  "branchable_failure_states": 17,
+  "branches": 106,
+  "failure_states": 24,
+  "preference_pairs": 19,
+  "status": "collecting",
+  "trajectory_chunks": 508
+}

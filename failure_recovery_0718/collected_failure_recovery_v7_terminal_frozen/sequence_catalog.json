@@ -1,0 +1,4 @@
+{
+  "catalog_size": 300,
+  "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+}

@@ -1,0 +1,1 @@
+{"baseline_subtask_failed": true, "failure_state_id": "s0100_t4_k032", "instruction": "stack the grasped block", "sequence_i": 100, "slow_age": 8, "split": "train", "step": 32, "subtask_i": 4, "task": "stack_block"}

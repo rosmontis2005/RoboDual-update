@@ -1,0 +1,163 @@
+{
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v7_terminal_frozen",
+  "dataset_subdir": "calvin_debug_dataset",
+  "empty_ref_after_age": 8,
+  "fast_num_inference_steps": 10,
+  "format": "robodual_failure_recovery_replay_v1",
+  "generalist_path": "/home/rosmontis/Projects/dualsys/models/generalist",
+  "horizon": 80,
+  "load_in_4bit": true,
+  "load_in_8bit": false,
+  "max_slow_age": 12,
+  "oracle_contract": "persisted_subtask_start_required",
+  "records": [
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 86703635,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 86703636,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 86703637,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 86703638,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 86703639,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c3000_s2428_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 242808318,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c3000_s2428_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 242808319,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c3000_s2428_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 242808320,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c3000_s2428_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 242808321,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c3000_s2428_t1_k032",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 242808322,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c5000_s4191_t1_k000",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 419112615,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c5000_s4191_t1_k000",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 419112616,
+      "split": "test",
+      "steps": 61,
+      "success": true,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c5000_s4191_t1_k000",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 419112617,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c5000_s4191_t1_k000",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 419112618,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c5000_s4191_t1_k000",
+      "oracle_source": "persisted_subtask_start",
+      "seed": 419112619,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    }
+  ],
+  "restore_contract": "bullet_reset_bullet_v2_gripper_v3",
+  "rollouts": 15,
+  "seed": 42,
+  "seeds_per_state": 5,
+  "slow_call_strategy": "task_age",
+  "slow_trigger_policy": "age_empty",
+  "specialist_path": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/lora_runs/recovery_stage1_v7_terminal_uniform_r4/specialist_transition_lora_merged_ema.pt",
+  "split": "test",
+  "stable_manifest_sha256": "9b47100366b928db8d1ef181617c7df91bf2f7ea6cc31ee99db89eedc5a39e38",
+  "states": 3,
+  "status": "complete",
+  "success_rate": 0.06666666666666667,
+  "successes": 1
+}

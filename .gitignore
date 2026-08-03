@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+
+*.egg-info/
+
+evaluation_results/
+CALVIN_ABC-D/
+vla-scripts/CALVIN_ABC-D/
+
+# LoRA datasets and generated training artifacts
+LoRA_transition_0711/collected_transition_v1*/
+LoRA_transition_0711/lora_runs/
+LoRA_trial/collected_lora_rollouts_task_age_v1/
+LoRA_trial/lora_runs/
+
+# Model and rollout data artifacts
+*.pt
+*.npy
+*.npz

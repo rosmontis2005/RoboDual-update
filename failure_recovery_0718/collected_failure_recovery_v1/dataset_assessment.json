@@ -1,0 +1,220 @@
+{
+  "branchability_rate": 0.4,
+  "branchable_failure_states": 8,
+  "branchable_states_by_split": {
+    "test": 1,
+    "train": 4,
+    "validation": 3
+  },
+  "branches": 180,
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v1",
+  "failure_states": 20,
+  "fixed_action_label_replay_pass": true,
+  "fixed_action_terminal_drift": [
+    {
+      "failure_state_id": "s0102_t4_k032",
+      "robot_max_abs": 6.242930531970578,
+      "scene_max_abs": 0.1476976804859041
+    },
+    {
+      "failure_state_id": "s0102_t4_k096",
+      "robot_max_abs": 0.21570025443427898,
+      "scene_max_abs": 0.02990403738965508
+    }
+  ],
+  "forced_refresh_minus_base_bootstrap_95ci": [
+    -0.1,
+    0.1
+  ],
+  "forced_refresh_minus_base_state_mean": 0.0,
+  "format": "robodual_failure_recovery_branch_v1",
+  "integrity_errors": [],
+  "persistent_replay_audit": {
+    "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v1",
+    "passed": true,
+    "records": [
+      {
+        "failure_state_id": "s0102_t4_k032",
+        "fixed_branch_expected_success": false,
+        "fixed_branch_id": "s0102_t4_k032_base_seed_00",
+        "fixed_branch_replay_success": false,
+        "fixed_branch_same_outcome": true,
+        "rgb_static_mean_abs": 0.0,
+        "robot_diff": [
+          0.0001257539713250197,
+          -0.00029666446711058836,
+          -0.00015340986538170398,
+          -0.00024127002915674822,
+          0.00046387522869227593,
+          -5.567530786976249e-05,
+          2.410543792352726e-09,
+          -1.4588677932358962e-08,
+          5.4751701172861544e-08,
+          -1.0677845940776365e-08,
+          -9.593676164598719e-08,
+          6.936270224855434e-09,
+          4.2220488216671015e-08,
+          1.5927736463083875e-08,
+          0.0
+        ],
+        "robot_ee6_max_abs": 0.00046387522869227593,
+        "robot_max_abs": 0.00046387522869227593,
+        "scene_max_abs": 5.1633291420216665e-08
+      },
+      {
+        "failure_state_id": "s0102_t4_k096",
+        "fixed_branch_expected_success": false,
+        "fixed_branch_id": "s0102_t4_k096_base_seed_00",
+        "fixed_branch_replay_success": false,
+        "fixed_branch_same_outcome": true,
+        "rgb_static_mean_abs": 0.0,
+        "robot_diff": [
+          0.0003584144648549614,
+          -4.13992315436984e-05,
+          -0.00012066415208056291,
+          -0.000496606273450162,
+          0.00023502154069560133,
+          -0.0003130946595433226,
+          9.131602245193715e-10,
+          -2.4387781794033003e-09,
+          -1.1740696193029976e-09,
+          8.476640012133885e-08,
+          1.0264882543964404e-07,
+          -2.5018238591911768e-08,
+          3.096079859155054e-08,
+          2.707471979945808e-08,
+          -2.0
+        ],
+        "robot_ee6_max_abs": 0.000496606273450162,
+        "robot_max_abs": 2.0,
+        "scene_max_abs": 3.9016245789724735e-08
+      },
+      {
+        "failure_state_id": "s0103_t3_k048",
+        "fixed_branch_expected_success": false,
+        "fixed_branch_id": "s0103_t3_k048_base_seed_00",
+        "fixed_branch_replay_success": false,
+        "fixed_branch_same_outcome": true,
+        "rgb_static_mean_abs": 0.0,
+        "robot_diff": [
+          -7.919284444124486e-05,
+          0.00020302255841338213,
+          1.263516012173227e-05,
+          -0.00010421135347593591,
+          3.781077574517566e-05,
+          0.000642441523909909,
+          -1.0502189118355432e-09,
+          -1.6841657290989076e-08,
+          1.627049828201166e-08,
+          -6.657833839796012e-09,
+          6.448606093556464e-08,
+          -2.8093091186676133e-08,
+          -3.400129400255025e-08,
+          3.221462652192031e-09,
+          0.0
+        ],
+        "robot_ee6_max_abs": 0.000642441523909909,
+        "robot_max_abs": 0.000642441523909909,
+        "scene_max_abs": 5.6909269297023e-08
+      }
+    ],
+    "rgb_tolerance": 0.05,
+    "state_tolerance": 0.001
+  },
+  "preference_pairs": 86,
+  "states_by_split": {
+    "test": 3,
+    "train": 12,
+    "validation": 5
+  },
+  "states_by_task": {
+    "lift_blue_block_slider": 4,
+    "lift_pink_block_table": 2,
+    "place_in_slider": 2,
+    "push_blue_block_left": 2,
+    "push_blue_block_right": 2,
+    "push_pink_block_left": 2,
+    "push_red_block_left": 2,
+    "rotate_red_block_left": 2,
+    "rotate_red_block_right": 2
+  },
+  "strategy_success_rate": {
+    "base_seed": {
+      "rate": 0.11666666666666667,
+      "success": 7,
+      "total": 60
+    },
+    "forced_refresh": {
+      "rate": 0.11666666666666667,
+      "success": 7,
+      "total": 60
+    },
+    "slow_override": {
+      "rate": 0.11666666666666667,
+      "success": 7,
+      "total": 60
+    }
+  },
+  "task_branch_success_rate": {
+    "lift_blue_block_slider": {
+      "rate": 0.0,
+      "success": 0,
+      "total": 36
+    },
+    "lift_pink_block_table": {
+      "rate": 0.2777777777777778,
+      "success": 5,
+      "total": 18
+    },
+    "place_in_slider": {
+      "rate": 0.0,
+      "success": 0,
+      "total": 18
+    },
+    "push_blue_block_left": {
+      "rate": 0.16666666666666666,
+      "success": 3,
+      "total": 18
+    },
+    "push_blue_block_right": {
+      "rate": 0.0,
+      "success": 0,
+      "total": 18
+    },
+    "push_pink_block_left": {
+      "rate": 0.05555555555555555,
+      "success": 1,
+      "total": 18
+    },
+    "push_red_block_left": {
+      "rate": 0.5,
+      "success": 9,
+      "total": 18
+    },
+    "rotate_red_block_left": {
+      "rate": 0.1111111111111111,
+      "success": 2,
+      "total": 18
+    },
+    "rotate_red_block_right": {
+      "rate": 0.05555555555555555,
+      "success": 1,
+      "total": 18
+    }
+  },
+  "trainable_positive_branches_by_split": {
+    "test": 4,
+    "train": 7,
+    "validation": 2
+  },
+  "training_admission": {
+    "fixed_action_label_replay": true,
+    "has_positive_and_negative": true,
+    "has_train_validation_test": true,
+    "integrity": true,
+    "minimum_branchable_states": true,
+    "persistent_replay": true,
+    "trainable_positive_in_each_split": true
+  },
+  "training_admitted": true
+}

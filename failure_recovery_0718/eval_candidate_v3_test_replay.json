@@ -1,0 +1,424 @@
+{
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v2_independent",
+  "format": "robodual_failure_recovery_replay_v1",
+  "horizon": 80,
+  "records": [
+    {
+      "failure_state_id": "s0200_t0_k040",
+      "seed": 20001882,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_left"
+    },
+    {
+      "failure_state_id": "s0200_t0_k040",
+      "seed": 20001883,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_left"
+    },
+    {
+      "failure_state_id": "s0200_t0_k040",
+      "seed": 20001884,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_left"
+    },
+    {
+      "failure_state_id": "s0206_t2_k048",
+      "seed": 20602148,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_into_drawer"
+    },
+    {
+      "failure_state_id": "s0206_t2_k048",
+      "seed": 20602149,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_into_drawer"
+    },
+    {
+      "failure_state_id": "s0206_t2_k048",
+      "seed": 20602150,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_into_drawer"
+    },
+    {
+      "failure_state_id": "s0222_t0_k040",
+      "seed": 22201948,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_right"
+    },
+    {
+      "failure_state_id": "s0222_t0_k040",
+      "seed": 22201949,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_right"
+    },
+    {
+      "failure_state_id": "s0222_t0_k040",
+      "seed": 22201950,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_right"
+    },
+    {
+      "failure_state_id": "c1000_s0434_t1_k032",
+      "seed": 43402336,
+      "split": "test",
+      "steps": 63,
+      "success": true,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0434_t1_k032",
+      "seed": 43402337,
+      "split": "test",
+      "steps": 64,
+      "success": true,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0434_t1_k032",
+      "seed": 43402338,
+      "split": "test",
+      "steps": 54,
+      "success": true,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0605_t1_k032",
+      "seed": 60502849,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0605_t1_k032",
+      "seed": 60502850,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0605_t1_k032",
+      "seed": 60502851,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0925_t1_k032",
+      "seed": 92503809,
+      "split": "test",
+      "steps": 69,
+      "success": true,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0925_t1_k032",
+      "seed": 92503810,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0925_t1_k032",
+      "seed": 92503811,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "failure_state_id": "c1000_s0745_t3_k048",
+      "seed": 74503765,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0745_t3_k048",
+      "seed": 74503766,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0745_t3_k048",
+      "seed": 74503767,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_red_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0668_t4_k048",
+      "seed": 66803534,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_pink_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0668_t4_k048",
+      "seed": 66803535,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_pink_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0668_t4_k048",
+      "seed": 66803536,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_pink_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0906_t1_k048",
+      "seed": 90604248,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_blue_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0906_t1_k048",
+      "seed": 90604249,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_blue_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0906_t1_k048",
+      "seed": 90604250,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_blue_block_table"
+    },
+    {
+      "failure_state_id": "c1000_s0445_t1_k032",
+      "seed": 44502369,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0445_t1_k032",
+      "seed": 44502370,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0445_t1_k032",
+      "seed": 44502371,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0517_t1_k032",
+      "seed": 51702585,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0517_t1_k032",
+      "seed": 51702586,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0517_t1_k032",
+      "seed": 51702587,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "seed": 86703635,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "seed": 86703636,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0867_t1_k032",
+      "seed": 86703637,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0475_t1_k032",
+      "seed": 47502459,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0475_t1_k032",
+      "seed": 47502460,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0475_t1_k032",
+      "seed": 47502461,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0635_t1_k032",
+      "seed": 63502939,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0635_t1_k032",
+      "seed": 63502940,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0635_t1_k032",
+      "seed": 63502941,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0727_t1_k032",
+      "seed": 72703215,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0727_t1_k032",
+      "seed": 72703216,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0727_t1_k032",
+      "seed": 72703217,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0584_t2_k032",
+      "seed": 58402786,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0584_t2_k032",
+      "seed": 58402787,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0584_t2_k032",
+      "seed": 58402788,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0874_t2_k032",
+      "seed": 87403656,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0874_t2_k032",
+      "seed": 87403657,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    },
+    {
+      "failure_state_id": "c1000_s0874_t2_k032",
+      "seed": 87403658,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "stack_block"
+    }
+  ],
+  "rollouts": 51,
+  "seed": 42,
+  "seeds_per_state": 3,
+  "specialist_path": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/lora_runs/recovery_stage1_v3_independent62/specialist_transition_lora_merged_ema.pt",
+  "split": "test",
+  "states": 17,
+  "status": "complete",
+  "success_rate": 0.0784313725490196,
+  "successes": 4
+}

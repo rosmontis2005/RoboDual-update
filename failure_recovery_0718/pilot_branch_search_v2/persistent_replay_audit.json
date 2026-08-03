@@ -1,0 +1,29 @@
+{
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/pilot_branch_search_v2",
+  "passed": false,
+  "records": [
+    {
+      "failure_state_id": "s0000_t2_k032",
+      "rgb_static_mean_abs": 6.79087495803833,
+      "robot_ee6_max_abs": 0.0025960869540828657,
+      "robot_max_abs": 0.0025960869540828657,
+      "scene_max_abs": 5.2572986852794656e-08
+    },
+    {
+      "failure_state_id": "s0000_t2_k096",
+      "rgb_static_mean_abs": 1.2260082960128784,
+      "robot_ee6_max_abs": 0.00040292933098484696,
+      "robot_max_abs": 0.00040292933098484696,
+      "scene_max_abs": 1.1250048137512181e-07
+    },
+    {
+      "failure_state_id": "s0002_t1_k040",
+      "rgb_static_mean_abs": 1.350183367729187,
+      "robot_ee6_max_abs": 0.0011412541950395205,
+      "robot_max_abs": 0.0011412541950395205,
+      "scene_max_abs": 4.646039086786402e-08
+    }
+  ],
+  "rgb_tolerance": 0.05,
+  "state_tolerance": 0.0002
+}

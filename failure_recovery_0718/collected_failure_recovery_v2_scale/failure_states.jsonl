@@ -1,0 +1,4 @@
+{"baseline_subtask_failed": true, "failure_state_id": "s0200_t0_k040", "instruction": "go push the blue block left", "sequence_i": 200, "slow_age": 10, "split": "test", "step": 40, "subtask_i": 0, "task": "push_blue_block_left"}
+{"baseline_subtask_failed": true, "failure_state_id": "s0200_t0_k120", "instruction": "go push the blue block left", "sequence_i": 200, "slow_age": 10, "split": "train", "step": 120, "subtask_i": 0, "task": "push_blue_block_left"}
+{"baseline_subtask_failed": true, "failure_state_id": "s0201_t2_k032", "instruction": "take the red block and rotate it to the right", "sequence_i": 201, "slow_age": 8, "split": "train", "step": 32, "subtask_i": 2, "task": "rotate_red_block_right"}
+{"baseline_subtask_failed": true, "failure_state_id": "s0201_t2_k096", "instruction": "take the red block and rotate it to the right", "sequence_i": 201, "slow_age": 12, "split": "train", "step": 96, "subtask_i": 2, "task": "rotate_red_block_right"}

@@ -1,0 +1,26 @@
+{
+  "normal": {
+    "normal_drift": 0.0,
+    "normal_drift_ee": 0.0,
+    "normal_drift_gripper": 0.0,
+    "normal_loss": 0.0,
+    "normal_supervised": 0.03335189364262621,
+    "overall_drift": 0.0,
+    "overall_drift_ee": 0.0,
+    "overall_drift_gripper": 0.0,
+    "overall_loss": 0.0,
+    "overall_supervised": 0.03335189364262621
+  },
+  "recovery": {
+    "overall_drift": 0.0,
+    "overall_drift_ee": 0.0,
+    "overall_drift_gripper": 0.0,
+    "overall_loss": 0.3985947294998315,
+    "overall_supervised": 0.3985947294998315,
+    "recovery_drift": 0.0,
+    "recovery_drift_ee": 0.0,
+    "recovery_drift_gripper": 0.0,
+    "recovery_loss": 0.3985947294998315,
+    "recovery_supervised": 0.3985947294998315
+  }
+}

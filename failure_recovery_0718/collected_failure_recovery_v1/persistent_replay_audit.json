@@ -1,0 +1,92 @@
+{
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v1",
+  "passed": true,
+  "records": [
+    {
+      "failure_state_id": "s0102_t4_k032",
+      "fixed_branch_expected_success": false,
+      "fixed_branch_id": "s0102_t4_k032_base_seed_00",
+      "fixed_branch_replay_success": false,
+      "fixed_branch_same_outcome": true,
+      "rgb_static_mean_abs": 0.0,
+      "robot_diff": [
+        0.0001257539713250197,
+        -0.00029666446711058836,
+        -0.00015340986538170398,
+        -0.00024127002915674822,
+        0.00046387522869227593,
+        -5.567530786976249e-05,
+        2.410543792352726e-09,
+        -1.4588677932358962e-08,
+        5.4751701172861544e-08,
+        -1.0677845940776365e-08,
+        -9.593676164598719e-08,
+        6.936270224855434e-09,
+        4.2220488216671015e-08,
+        1.5927736463083875e-08,
+        0.0
+      ],
+      "robot_ee6_max_abs": 0.00046387522869227593,
+      "robot_max_abs": 0.00046387522869227593,
+      "scene_max_abs": 5.1633291420216665e-08
+    },
+    {
+      "failure_state_id": "s0102_t4_k096",
+      "fixed_branch_expected_success": false,
+      "fixed_branch_id": "s0102_t4_k096_base_seed_00",
+      "fixed_branch_replay_success": false,
+      "fixed_branch_same_outcome": true,
+      "rgb_static_mean_abs": 0.0,
+      "robot_diff": [
+        0.0003584144648549614,
+        -4.13992315436984e-05,
+        -0.00012066415208056291,
+        -0.000496606273450162,
+        0.00023502154069560133,
+        -0.0003130946595433226,
+        9.131602245193715e-10,
+        -2.4387781794033003e-09,
+        -1.1740696193029976e-09,
+        8.476640012133885e-08,
+        1.0264882543964404e-07,
+        -2.5018238591911768e-08,
+        3.096079859155054e-08,
+        2.707471979945808e-08,
+        -2.0
+      ],
+      "robot_ee6_max_abs": 0.000496606273450162,
+      "robot_max_abs": 2.0,
+      "scene_max_abs": 3.9016245789724735e-08
+    },
+    {
+      "failure_state_id": "s0103_t3_k048",
+      "fixed_branch_expected_success": false,
+      "fixed_branch_id": "s0103_t3_k048_base_seed_00",
+      "fixed_branch_replay_success": false,
+      "fixed_branch_same_outcome": true,
+      "rgb_static_mean_abs": 0.0,
+      "robot_diff": [
+        -7.919284444124486e-05,
+        0.00020302255841338213,
+        1.263516012173227e-05,
+        -0.00010421135347593591,
+        3.781077574517566e-05,
+        0.000642441523909909,
+        -1.0502189118355432e-09,
+        -1.6841657290989076e-08,
+        1.627049828201166e-08,
+        -6.657833839796012e-09,
+        6.448606093556464e-08,
+        -2.8093091186676133e-08,
+        -3.400129400255025e-08,
+        3.221462652192031e-09,
+        0.0
+      ],
+      "robot_ee6_max_abs": 0.000642441523909909,
+      "robot_max_abs": 0.000642441523909909,
+      "scene_max_abs": 5.6909269297023e-08
+    }
+  ],
+  "rgb_tolerance": 0.05,
+  "state_tolerance": 0.001
+}

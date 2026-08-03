@@ -1,0 +1,614 @@
+{
+  "excluded_branches": [
+    {
+      "branch_id": "s0200_t0_k040_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0200_t0_k040_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0200_t0_k040_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0200_t0_k040_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0200_t0_k040_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0200_t0_k040_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0201_t2_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0201_t2_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0201_t2_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0201_t2_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0201_t2_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0201_t2_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0203_t3_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0203_t3_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0203_t3_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0203_t3_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0203_t3_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0203_t3_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0205_t1_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0205_t1_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0205_t1_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0205_t1_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0205_t1_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0205_t1_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0206_t2_k048_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0206_t2_k048_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0206_t2_k048_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0206_t2_k048_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0206_t2_k048_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0206_t2_k048_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0208_t2_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0208_t2_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0208_t2_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0208_t2_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0208_t2_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0208_t2_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0211_t3_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0211_t3_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0211_t3_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0211_t3_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0211_t3_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0211_t3_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0212_t1_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0212_t1_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0212_t1_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0212_t1_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0212_t1_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0212_t1_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0216_t1_k048_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0216_t1_k048_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0216_t1_k048_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0216_t1_k048_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0216_t1_k048_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0216_t1_k048_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0217_t2_k048_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0217_t2_k048_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0217_t2_k048_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0217_t2_k048_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0217_t2_k048_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0217_t2_k048_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0222_t0_k040_base_seed_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0222_t0_k040_base_seed_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0222_t0_k040_base_seed_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0222_t0_k040_base_seed_03",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0222_t0_k040_base_seed_04",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0222_t0_k040_base_seed_05",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_demo_guided_persisted_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_demo_guided_persisted_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0207_t3_k032_demo_guided_persisted_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_demo_guided_persisted_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_demo_guided_persisted_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0214_t1_k040_demo_guided_persisted_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_demo_guided_persisted_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_demo_guided_persisted_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0221_t2_k040_demo_guided_persisted_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_demo_guided_persisted_00",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_demo_guided_persisted_01",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "s0220_t4_k032_demo_guided_persisted_02",
+      "reason": "state_quarantined"
+    },
+    {
+      "branch_id": "c1000_s0605_t1_k032_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0605_t1_k032_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0605_t1_k032_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0648_t1_k040_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0648_t1_k040_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0648_t1_k040_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0925_t1_k032_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0925_t1_k032_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0925_t1_k032_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0806_t1_k032_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0806_t1_k032_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0806_t1_k032_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0468_t1_k032_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0468_t1_k032_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0468_t1_k032_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0444_t2_k048_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0444_t2_k048_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0444_t2_k048_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0684_t2_k032_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0684_t2_k032_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0684_t2_k032_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0899_t2_k032_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0899_t2_k032_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0899_t2_k032_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0745_t3_k048_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0745_t3_k048_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0745_t3_k048_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0668_t4_k048_demo_guided_persisted_00",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0668_t4_k048_demo_guided_persisted_01",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    },
+    {
+      "branch_id": "c1000_s0668_t4_k048_demo_guided_persisted_02",
+      "reason": "legacy_persisted_restore_or_oracle_contract"
+    }
+  ],
+  "excluded_states": [
+    {
+      "failure_state_id": "s0200_t0_k040",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0201_t2_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0203_t3_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0205_t1_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0206_t2_k048",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0207_t3_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0208_t2_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0211_t3_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0212_t1_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0214_t1_k040",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0216_t1_k048",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0217_t2_k048",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0220_t4_k032",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0221_t2_k040",
+      "reason": "missing_persisted_subtask_oracle_start"
+    },
+    {
+      "failure_state_id": "s0222_t0_k040",
+      "reason": "missing_persisted_subtask_oracle_start"
+    }
+  ],
+  "format": "robodual_failure_recovery_repair_v1",
+  "result": {
+    "branchable_by_split": {
+      "test": 5,
+      "train": 14,
+      "validation": 4
+    },
+    "branchable_failure_states": 23,
+    "branches": 324,
+    "failure_states": 47,
+    "preference_pairs": 218,
+    "status": "collecting"
+  },
+  "rules": {
+    "max_pairs_per_state": 16,
+    "require_persisted_subtask_oracle_start": true,
+    "require_v2_provenance_for_demo_guided_persisted": true
+  },
+  "source": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v2_independent",
+  "source_manifest_sha256": "af6890c328b1923ef6bc1ab5e80908cde399a9ad2106ebfe7b32736ef63b3ad2"
+}

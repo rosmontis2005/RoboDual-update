@@ -1,0 +1,31 @@
+{
+  "format": "robodual_demo_guided_multitask_audit_v1",
+  "physical_successes": 0,
+  "records": [
+    {
+      "failure_state_id": "s0203_t3_k032",
+      "object_diagnostic": null,
+      "physical_postcondition": false,
+      "snapshot_anchor_standard_oracle": false,
+      "steps": 64,
+      "task": "place_in_slider"
+    },
+    {
+      "failure_state_id": "s0205_t1_k032",
+      "object_diagnostic": null,
+      "physical_postcondition": false,
+      "snapshot_anchor_standard_oracle": false,
+      "steps": 64,
+      "task": "place_in_slider"
+    },
+    {
+      "failure_state_id": "s0244_t1_k032",
+      "object_diagnostic": null,
+      "physical_postcondition": false,
+      "snapshot_anchor_standard_oracle": false,
+      "steps": 64,
+      "task": "place_in_slider"
+    }
+  ],
+  "states": 3
+}

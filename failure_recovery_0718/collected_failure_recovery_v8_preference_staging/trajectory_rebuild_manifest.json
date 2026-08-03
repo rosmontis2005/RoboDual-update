@@ -1,0 +1,350 @@
+{
+  "format": "robodual_recovery_trajectory_rebuild_v1",
+  "included_negative_branches": true,
+  "negative_branches": 16,
+  "positive_branches": 18,
+  "rebuilt": [
+    {
+      "branch_id": "c1000_s0350_t1_k048_base_seed_01",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c1000_s0350_t1_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0555_t1_k040_base_seed_01",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c1000_s0555_t1_k040",
+      "task": "lift_blue_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0683_t2_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c1000_s0683_t2_k032",
+      "task": "lift_pink_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0375_t2_k048_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c1000_s0375_t2_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0867_t1_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c1000_s0867_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0481_t0_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c1000_s0481_t0_k032",
+      "task": "lift_red_block_slider",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1340_t1_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c2000_s1340_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1374_t1_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c2000_s1374_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1400_t1_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c2000_s1400_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1409_t1_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c2000_s1409_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1445_t1_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c2000_s1445_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c3000_s2428_t1_k032_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c3000_s2428_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c4000_s3279_t1_k000_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c4000_s3279_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c5000_s4372_t1_k000_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c5000_s4372_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c5000_s4654_t1_k000_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c5000_s4654_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c5000_s4191_t1_k000_baseline_failed_continuation_00",
+      "chunks": 10,
+      "first_success_step": null,
+      "original_steps": 80,
+      "rebuilt_steps": 80,
+      "state_id": "c5000_s4191_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0350_t1_k048_base_seed_00",
+      "chunks": 5,
+      "first_success_step": 36,
+      "original_steps": 40,
+      "rebuilt_steps": 40,
+      "state_id": "c1000_s0350_t1_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0350_t1_k048_demo_guided_01",
+      "chunks": 7,
+      "first_success_step": 55,
+      "original_steps": 56,
+      "rebuilt_steps": 56,
+      "state_id": "c1000_s0350_t1_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0555_t1_k040_base_seed_00",
+      "chunks": 5,
+      "first_success_step": 33,
+      "original_steps": 40,
+      "rebuilt_steps": 40,
+      "state_id": "c1000_s0555_t1_k040",
+      "task": "lift_blue_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0555_t1_k040_base_seed_02",
+      "chunks": 4,
+      "first_success_step": 32,
+      "original_steps": 32,
+      "rebuilt_steps": 32,
+      "state_id": "c1000_s0555_t1_k040",
+      "task": "lift_blue_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0683_t2_k032_base_seed_00",
+      "chunks": 6,
+      "first_success_step": 45,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c1000_s0683_t2_k032",
+      "task": "lift_pink_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0375_t2_k048_base_seed_00",
+      "chunks": 4,
+      "first_success_step": 29,
+      "original_steps": 32,
+      "rebuilt_steps": 32,
+      "state_id": "c1000_s0375_t2_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0867_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c1000_s0867_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0481_t0_k032_demo_guided_00",
+      "chunks": 7,
+      "first_success_step": 51,
+      "original_steps": 56,
+      "rebuilt_steps": 56,
+      "state_id": "c1000_s0481_t0_k032",
+      "task": "lift_red_block_slider",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1340_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 42,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1340_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1374_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1374_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1400_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1400_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1409_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1409_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c2000_s1445_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1445_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c3000_s2428_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c3000_s2428_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c4000_s3279_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 42,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c4000_s3279_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c5000_s4372_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 42,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c5000_s4372_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c5000_s4654_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c5000_s4654_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c5000_s4191_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 48,
+      "rebuilt_steps": 48,
+      "state_id": "c5000_s4191_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 0
+    }
+  ],
+  "restore_contract": "bullet_reset_bullet_v2_gripper_v3",
+  "status": "audit_required"
+}

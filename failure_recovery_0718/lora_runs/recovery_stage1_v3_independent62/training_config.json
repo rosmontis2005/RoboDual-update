@@ -1,0 +1,335 @@
+{
+  "args": {
+    "action_chunk_size": 8,
+    "allow_unadmitted_data": false,
+    "bf16": true,
+    "checkpoint_source": "ema_model",
+    "cond_drop_chance": 0.0,
+    "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v2_independent",
+    "empty_ref_after_age": 8,
+    "fast_num_inference_steps": 10,
+    "front_action_steps": 2,
+    "front_action_weight": 2.0,
+    "generalist_path": "/home/rosmontis/Projects/dualsys/models/generalist",
+    "grad_accumulation_steps": 4,
+    "gripper_preservation_weight": 2.0,
+    "history_steps": 4,
+    "learning_rate": 3e-05,
+    "lora_alpha": 2.0,
+    "lora_rank": 2,
+    "max_grad_norm": 1.0,
+    "max_normal_gripper_drift": 0.0001,
+    "max_normal_prediction_drift": 0.0002,
+    "max_steps": 800,
+    "normal_preservation_weight": 4.0,
+    "normal_replay_dir": "/home/rosmontis/Projects/dualsys/RoboDual/LoRA_transition_0711/collected_transition_v1_repaired",
+    "normal_supervised_weight": 0.0,
+    "output_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/lora_runs/recovery_stage1_v3_independent62",
+    "seed": 42,
+    "selection_min_recovery_improvement": 4e-05,
+    "specialist_path": "/home/rosmontis/Projects/dualsys/models/specialist/Specialist+Depth+Gripper.pt",
+    "transition_preservation_weight": 0.2,
+    "transition_supervised_weight": 1.0,
+    "validation_interval": 100,
+    "validation_seed": 20260718,
+    "vision_encoder": "DINO",
+    "with_depth": true,
+    "with_gripper": true,
+    "with_tactile": false
+  },
+  "dataset_assessment": {
+    "branchability_rate": 0.5,
+    "branchable_failure_states": 31,
+    "branchable_states_by_split": {
+      "test": 7,
+      "train": 20,
+      "validation": 4
+    },
+    "branches": 456,
+    "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v2_independent",
+    "failure_states": 62,
+    "fixed_action_label_replay_pass": true,
+    "fixed_action_terminal_drift": [
+      {
+        "failure_state_id": "c1000_s0589_t2_k032",
+        "robot_max_abs": 0.5352987272701305,
+        "scene_max_abs": 0.4400024967454482
+      },
+      {
+        "failure_state_id": "c1000_s0874_t2_k032",
+        "robot_max_abs": 0.8662449205585288,
+        "scene_max_abs": 2.050603777977748
+      }
+    ],
+    "forced_refresh_minus_base_bootstrap_95ci": [
+      null,
+      null
+    ],
+    "forced_refresh_minus_base_state_mean": null,
+    "format": "robodual_failure_recovery_branch_v1",
+    "integrity_errors": [],
+    "persistent_replay_audit": {
+      "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v2_independent",
+      "passed": true,
+      "records": [
+        {
+          "failure_state_id": "s0200_t0_k040",
+          "fixed_action_replay": true,
+          "fixed_branch_expected_steps": 80,
+          "fixed_branch_expected_success": false,
+          "fixed_branch_id": "s0200_t0_k040_base_seed_00",
+          "fixed_branch_replay_steps": 80,
+          "fixed_branch_replay_success": false,
+          "fixed_branch_same_length": true,
+          "fixed_branch_same_outcome": true,
+          "rgb_static_mean_abs": 0.0,
+          "robot_diff": [
+            -0.0003938950743955921,
+            6.752720647155985e-05,
+            -0.00014193575113863321,
+            8.305699308053249e-05,
+            0.00017528721540520029,
+            0.00017761761806389664,
+            9.109981649255139e-15,
+            2.679876542899251e-09,
+            -9.84027448414082e-09,
+            5.119195733982451e-08,
+            9.459352856566738e-09,
+            -1.2241506253118928e-08,
+            -4.683481469314188e-08,
+            -1.129082694006911e-08,
+            2.0
+          ],
+          "robot_ee6_max_abs": 0.0003938950743955921,
+          "robot_max_abs": 2.0,
+          "scene_max_abs": 3.41085171218225e-08
+        },
+        {
+          "failure_state_id": "s0201_t2_k032",
+          "fixed_action_replay": true,
+          "fixed_branch_expected_steps": 80,
+          "fixed_branch_expected_success": false,
+          "fixed_branch_id": "s0201_t2_k032_base_seed_00",
+          "fixed_branch_replay_steps": 80,
+          "fixed_branch_replay_success": false,
+          "fixed_branch_same_length": true,
+          "fixed_branch_same_outcome": true,
+          "rgb_static_mean_abs": 0.0,
+          "robot_diff": [
+            9.907908621750727e-06,
+            -2.7831833224007882e-05,
+            1.3943534345695063e-05,
+            -0.0001528353720074982,
+            9.559096260366995e-05,
+            -0.00048234302508465277,
+            -1.258323563402275e-09,
+            -6.980437561310282e-09,
+            1.299027119205931e-08,
+            1.8059396644787284e-08,
+            -1.0722738030821688e-08,
+            -1.2535731341856149e-08,
+            8.916715321660718e-08,
+            2.791423059367304e-08,
+            0.0
+          ],
+          "robot_ee6_max_abs": 0.00048234302508465277,
+          "robot_max_abs": 0.00048234302508465277,
+          "scene_max_abs": 4.875040104934669e-08
+        },
+        {
+          "failure_state_id": "s0203_t3_k032",
+          "fixed_action_replay": true,
+          "fixed_branch_expected_steps": 80,
+          "fixed_branch_expected_success": false,
+          "fixed_branch_id": "s0203_t3_k032_base_seed_00",
+          "fixed_branch_replay_steps": 80,
+          "fixed_branch_replay_success": false,
+          "fixed_branch_same_length": true,
+          "fixed_branch_same_outcome": true,
+          "rgb_static_mean_abs": 0.0,
+          "robot_diff": [
+            -7.035200249186357e-05,
+            3.048445886576906e-05,
+            1.672976889144362e-05,
+            -7.732917609626355e-05,
+            0.0008562965889014895,
+            0.00044948156717183885,
+            3.1013789453249174e-10,
+            -5.542884429221573e-09,
+            2.3458211373394988e-08,
+            -2.975424195916787e-08,
+            2.9093698117321765e-08,
+            1.9002531992384775e-08,
+            -2.8242709948500533e-08,
+            8.321104916220179e-09,
+            2.0
+          ],
+          "robot_ee6_max_abs": 0.0008562965889014895,
+          "robot_max_abs": 2.0,
+          "scene_max_abs": 5.2938274208713665e-08
+        }
+      ],
+      "rgb_tolerance": 0.05,
+      "state_tolerance": 0.001
+    },
+    "preference_pairs": 306,
+    "states_by_split": {
+      "test": 17,
+      "train": 35,
+      "validation": 10
+    },
+    "states_by_task": {
+      "lift_blue_block_slider": 1,
+      "lift_blue_block_table": 5,
+      "lift_pink_block_slider": 1,
+      "lift_pink_block_table": 9,
+      "lift_red_block_slider": 5,
+      "lift_red_block_table": 6,
+      "move_slider_left": 1,
+      "place_in_slider": 5,
+      "push_blue_block_left": 1,
+      "push_blue_block_right": 1,
+      "push_into_drawer": 2,
+      "rotate_blue_block_left": 1,
+      "rotate_red_block_right": 1,
+      "stack_block": 23
+    },
+    "strategy_success_rate": {
+      "base_seed": {
+        "rate": 0.13675213675213677,
+        "success": 32,
+        "total": 234
+      },
+      "baseline_failed_continuation": {
+        "rate": 0.0,
+        "success": 0,
+        "total": 36
+      },
+      "demo_guided": {
+        "rate": 0.3611111111111111,
+        "success": 52,
+        "total": 144
+      },
+      "demo_guided_persisted": {
+        "rate": 0.35714285714285715,
+        "success": 15,
+        "total": 42
+      }
+    },
+    "task_branch_success_rate": {
+      "lift_blue_block_slider": {
+        "rate": 0.0,
+        "success": 0,
+        "total": 9
+      },
+      "lift_blue_block_table": {
+        "rate": 0.3055555555555556,
+        "success": 11,
+        "total": 36
+      },
+      "lift_pink_block_slider": {
+        "rate": 0.3333333333333333,
+        "success": 3,
+        "total": 9
+      },
+      "lift_pink_block_table": {
+        "rate": 0.2894736842105263,
+        "success": 22,
+        "total": 76
+      },
+      "lift_red_block_slider": {
+        "rate": 0.2,
+        "success": 8,
+        "total": 40
+      },
+      "lift_red_block_table": {
+        "rate": 0.40425531914893614,
+        "success": 19,
+        "total": 47
+      },
+      "move_slider_left": {
+        "rate": 0.6666666666666666,
+        "success": 4,
+        "total": 6
+      },
+      "place_in_slider": {
+        "rate": 0.027777777777777776,
+        "success": 1,
+        "total": 36
+      },
+      "push_blue_block_left": {
+        "rate": 0.0,
+        "success": 0,
+        "total": 6
+      },
+      "push_blue_block_right": {
+        "rate": 0.0,
+        "success": 0,
+        "total": 6
+      },
+      "push_into_drawer": {
+        "rate": 0.08333333333333333,
+        "success": 1,
+        "total": 12
+      },
+      "rotate_blue_block_left": {
+        "rate": 0.16666666666666666,
+        "success": 1,
+        "total": 6
+      },
+      "rotate_red_block_right": {
+        "rate": 0.0,
+        "success": 0,
+        "total": 6
+      },
+      "stack_block": {
+        "rate": 0.18012422360248448,
+        "success": 29,
+        "total": 161
+      }
+    },
+    "trainable_positive_branches_by_split": {
+      "test": 17,
+      "train": 56,
+      "validation": 13
+    },
+    "training_admission": {
+      "fixed_action_label_replay": true,
+      "has_positive_and_negative": true,
+      "has_train_validation_test": true,
+      "integrity": true,
+      "minimum_branchable_states": true,
+      "persistent_replay": true,
+      "trainable_positive_in_each_split": true
+    },
+    "training_admitted": true
+  },
+  "lora_targets": [
+    "model.x_embedder",
+    "model.context_adapter",
+    "model.blocks.4.cross_attn.attn.l_proj",
+    "model.blocks.4.cross_attn.attn.values_l_proj",
+    "model.blocks.5.cross_attn.attn.l_proj",
+    "model.blocks.5.cross_attn.attn.values_l_proj"
+  ],
+  "normal_samples": {
+    "test": 600,
+    "train": 2800,
+    "validation": 601
+  },
+  "recovery_samples": {
+    "test": 17,
+    "train": 56,
+    "validation": 13
+  },
+  "specialist_load_info": {
+    "ema_checkpoint": true,
+    "loaded_from": "ema_model",
+    "missing_keys": [],
+    "unexpected_keys": [
+      "_dummy_variable"
+    ]
+  },
+  "stage": "positive recovery BC + matched base preservation; preference optimization deferred",
+  "trainable_params": 13340
+}

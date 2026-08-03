@@ -1,0 +1,39 @@
+{
+  "changed_states": 6,
+  "changes": [
+    {
+      "expected_gripper_action": 1,
+      "failure_state_id": "c1000_s0375_t2_k048",
+      "previous_gripper_action": -1
+    },
+    {
+      "expected_gripper_action": 1,
+      "failure_state_id": "c1000_s0481_t0_k032",
+      "previous_gripper_action": -1
+    },
+    {
+      "expected_gripper_action": -1,
+      "failure_state_id": "c2000_s1400_t1_k032",
+      "previous_gripper_action": 1
+    },
+    {
+      "expected_gripper_action": -1,
+      "failure_state_id": "c2000_s1445_t1_k032",
+      "previous_gripper_action": 1
+    },
+    {
+      "expected_gripper_action": -1,
+      "failure_state_id": "c5000_s4372_t1_k000",
+      "previous_gripper_action": 1
+    },
+    {
+      "expected_gripper_action": -1,
+      "failure_state_id": "c5000_s4504_t1_k000",
+      "previous_gripper_action": 1
+    }
+  ],
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v5_replay_stable",
+  "format": "robodual_recovery_gripper_metadata_repair_v1",
+  "states": 24,
+  "status": "persistent_replay_audit_required"
+}

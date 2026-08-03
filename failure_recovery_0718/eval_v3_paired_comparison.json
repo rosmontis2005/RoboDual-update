@@ -1,0 +1,88 @@
+{
+  "base_specialist_path": "/home/rosmontis/Projects/dualsys/models/specialist/Specialist+Depth+Gripper.pt",
+  "base_success_rate": 0.0784313725490196,
+  "base_successes": 4,
+  "candidate_specialist_path": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/lora_runs/recovery_stage1_v3_independent62/specialist_transition_lora_merged_ema.pt",
+  "candidate_success_rate": 0.0784313725490196,
+  "candidate_successes": 4,
+  "changed_records": [
+    {
+      "change": "gain",
+      "failure_state_id": "c1000_s0925_t1_k032",
+      "seed": 92503809,
+      "task": "lift_red_block_slider"
+    },
+    {
+      "change": "loss",
+      "failure_state_id": "c1000_s0635_t1_k032",
+      "seed": 63502939,
+      "task": "stack_block"
+    }
+  ],
+  "exact_sign_test_two_sided_p": 1.0,
+  "format": "robodual_failure_recovery_paired_comparison_v1",
+  "paired_gains": 1,
+  "paired_losses": 1,
+  "rollouts": 51,
+  "success_rate_delta": 0.0,
+  "tasks": {
+    "lift_blue_block_table": {
+      "base": 0,
+      "candidate": 0,
+      "gains": 0,
+      "losses": 0,
+      "rollouts": 3
+    },
+    "lift_pink_block_table": {
+      "base": 0,
+      "candidate": 0,
+      "gains": 0,
+      "losses": 0,
+      "rollouts": 3
+    },
+    "lift_red_block_slider": {
+      "base": 3,
+      "candidate": 4,
+      "gains": 1,
+      "losses": 0,
+      "rollouts": 9
+    },
+    "lift_red_block_table": {
+      "base": 0,
+      "candidate": 0,
+      "gains": 0,
+      "losses": 0,
+      "rollouts": 3
+    },
+    "push_blue_block_left": {
+      "base": 0,
+      "candidate": 0,
+      "gains": 0,
+      "losses": 0,
+      "rollouts": 3
+    },
+    "push_blue_block_right": {
+      "base": 0,
+      "candidate": 0,
+      "gains": 0,
+      "losses": 0,
+      "rollouts": 3
+    },
+    "push_into_drawer": {
+      "base": 0,
+      "candidate": 0,
+      "gains": 0,
+      "losses": 0,
+      "rollouts": 3
+    },
+    "stack_block": {
+      "base": 1,
+      "candidate": 0,
+      "gains": 0,
+      "losses": 1,
+      "rollouts": 24
+    }
+  },
+  "unchanged_failure": 46,
+  "unchanged_success": 3
+}

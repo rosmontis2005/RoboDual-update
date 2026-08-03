@@ -1,0 +1,30 @@
+{
+  "c1000": {
+    "catalog_size": 1000,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  },
+  "c2000": {
+    "catalog_size": 2000,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  },
+  "c3000": {
+    "catalog_size": 3000,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  },
+  "c4000": {
+    "catalog_size": 4000,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  },
+  "c5000": {
+    "catalog_size": 5000,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  },
+  "c6000": {
+    "catalog_size": 6000,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  },
+  "legacy300": {
+    "catalog_size": 300,
+    "generator": "calvin_agent.evaluation.multistep_sequences.get_sequences"
+  }
+}

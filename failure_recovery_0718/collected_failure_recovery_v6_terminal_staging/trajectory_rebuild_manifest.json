@@ -1,0 +1,198 @@
+{
+  "format": "robodual_recovery_trajectory_rebuild_v1",
+  "positive_branches": 19,
+  "rebuilt": [
+    {
+      "branch_id": "c1000_s0350_t1_k048_base_seed_00",
+      "chunks": 5,
+      "first_success_step": 36,
+      "original_steps": 36,
+      "rebuilt_steps": 40,
+      "state_id": "c1000_s0350_t1_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 4
+    },
+    {
+      "branch_id": "c1000_s0350_t1_k048_demo_guided_01",
+      "chunks": 7,
+      "first_success_step": 55,
+      "original_steps": 55,
+      "rebuilt_steps": 56,
+      "state_id": "c1000_s0350_t1_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 1
+    },
+    {
+      "branch_id": "c1000_s0555_t1_k040_base_seed_00",
+      "chunks": 5,
+      "first_success_step": 33,
+      "original_steps": 33,
+      "rebuilt_steps": 40,
+      "state_id": "c1000_s0555_t1_k040",
+      "task": "lift_blue_block_table",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c1000_s0555_t1_k040_base_seed_02",
+      "chunks": 4,
+      "first_success_step": 32,
+      "original_steps": 32,
+      "rebuilt_steps": 32,
+      "state_id": "c1000_s0555_t1_k040",
+      "task": "lift_blue_block_table",
+      "terminal_padding_steps": 0
+    },
+    {
+      "branch_id": "c1000_s0683_t2_k032_base_seed_00",
+      "chunks": 6,
+      "first_success_step": 45,
+      "original_steps": 45,
+      "rebuilt_steps": 48,
+      "state_id": "c1000_s0683_t2_k032",
+      "task": "lift_pink_block_table",
+      "terminal_padding_steps": 3
+    },
+    {
+      "branch_id": "c1000_s0375_t2_k048_base_seed_00",
+      "chunks": 4,
+      "first_success_step": 29,
+      "original_steps": 29,
+      "rebuilt_steps": 32,
+      "state_id": "c1000_s0375_t2_k048",
+      "task": "lift_red_block_table",
+      "terminal_padding_steps": 3
+    },
+    {
+      "branch_id": "c1000_s0867_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c1000_s0867_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c1000_s0481_t0_k032_demo_guided_00",
+      "chunks": 7,
+      "first_success_step": 51,
+      "original_steps": 51,
+      "rebuilt_steps": 56,
+      "state_id": "c1000_s0481_t0_k032",
+      "task": "lift_red_block_slider",
+      "terminal_padding_steps": 5
+    },
+    {
+      "branch_id": "c2000_s1340_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 42,
+      "original_steps": 42,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1340_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 6
+    },
+    {
+      "branch_id": "c2000_s1374_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1374_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c2000_s1400_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1400_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c2000_s1409_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1409_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c2000_s1445_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c2000_s1445_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c3000_s2428_t1_k032_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c3000_s2428_t1_k032",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c4000_s3279_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 42,
+      "original_steps": 42,
+      "rebuilt_steps": 48,
+      "state_id": "c4000_s3279_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 6
+    },
+    {
+      "branch_id": "c5000_s4372_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 42,
+      "original_steps": 42,
+      "rebuilt_steps": 48,
+      "state_id": "c5000_s4372_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 6
+    },
+    {
+      "branch_id": "c5000_s4654_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c5000_s4654_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c5000_s4191_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c5000_s4191_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    },
+    {
+      "branch_id": "c5000_s4504_t1_k000_demo_guided_00",
+      "chunks": 6,
+      "first_success_step": 41,
+      "original_steps": 41,
+      "rebuilt_steps": 48,
+      "state_id": "c5000_s4504_t1_k000",
+      "task": "stack_block",
+      "terminal_padding_steps": 7
+    }
+  ],
+  "restore_contract": "bullet_reset_bullet_v2_gripper_v3",
+  "status": "audit_required"
+}

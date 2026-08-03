@@ -1,0 +1,1 @@
+{"baseline_subtask_failed": true, "failure_state_id": "s0002_t0_k080", "instruction": "go push the blue block right", "sequence_i": 2, "slow_age": 9, "split": "train", "step": 80, "subtask_i": 0, "task": "push_blue_block_right"}

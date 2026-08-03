@@ -1,0 +1,36 @@
+{
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/persistent_restore_diagnostic_v1",
+  "passed": true,
+  "records": [
+    {
+      "failure_state_id": "s0100_t4_k032",
+      "fixed_branch_expected_success": false,
+      "fixed_branch_id": "s0100_t4_k032_base_seed_00",
+      "fixed_branch_replay_success": false,
+      "fixed_branch_same_outcome": true,
+      "rgb_static_mean_abs": 0.0,
+      "robot_diff": [
+        -0.0005282254088887287,
+        0.0002347255922665395,
+        5.09598895246377e-05,
+        0.0002955187207018817,
+        -8.718972543461656e-05,
+        0.000723188527306684,
+        5.501134270335939e-10,
+        -1.3391218800506977e-08,
+        1.758335299584246e-08,
+        1.476006139533581e-08,
+        -2.8028150911296734e-08,
+        -2.77360487910272e-08,
+        -2.5958619698229768e-08,
+        -2.788893127547709e-08,
+        2.0
+      ],
+      "robot_ee6_max_abs": 0.000723188527306684,
+      "robot_max_abs": 2.0,
+      "scene_max_abs": 3.999609843319263e-08
+    }
+  ],
+  "rgb_tolerance": 0.05,
+  "state_tolerance": 0.001
+}

@@ -1,0 +1,119 @@
+{
+  "branchability_rate": 0.6486486486486487,
+  "branchable_failure_states": 24,
+  "branchable_states_by_split": {
+    "test": 4,
+    "train": 12,
+    "validation": 8
+  },
+  "branches": 278,
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v3_stable",
+  "failure_states": 37,
+  "fixed_action_label_replay_pass": false,
+  "fixed_action_terminal_drift": [],
+  "forced_refresh_minus_base_bootstrap_95ci": [
+    null,
+    null
+  ],
+  "forced_refresh_minus_base_state_mean": null,
+  "format": "robodual_failure_recovery_branch_v1_in_progress",
+  "integrity_errors": [],
+  "persistent_replay_audit": {
+    "passed": false,
+    "reason": "persistent replay audit has not been run"
+  },
+  "preference_pairs": 167,
+  "required_validation_tasks": [
+    "stack_block"
+  ],
+  "states_by_split": {
+    "test": 5,
+    "train": 16,
+    "validation": 16
+  },
+  "states_by_task": {
+    "lift_blue_block_table": 1,
+    "lift_pink_block_table": 1,
+    "lift_red_block_slider": 1,
+    "lift_red_block_table": 2,
+    "stack_block": 32
+  },
+  "strategy_success_rate": {
+    "base_seed": {
+      "rate": 0.4,
+      "success": 6,
+      "total": 15
+    },
+    "baseline_failed_continuation": {
+      "rate": 0.0,
+      "success": 0,
+      "total": 35
+    },
+    "demo_guided": {
+      "rate": 0.5745614035087719,
+      "success": 131,
+      "total": 228
+    }
+  },
+  "task_branch_success_rate": {
+    "lift_blue_block_table": {
+      "rate": 0.6666666666666666,
+      "success": 2,
+      "total": 3
+    },
+    "lift_pink_block_table": {
+      "rate": 0.5,
+      "success": 1,
+      "total": 2
+    },
+    "lift_red_block_slider": {
+      "rate": 0.5,
+      "success": 1,
+      "total": 2
+    },
+    "lift_red_block_table": {
+      "rate": 0.6,
+      "success": 3,
+      "total": 5
+    },
+    "stack_block": {
+      "rate": 0.48872180451127817,
+      "success": 130,
+      "total": 266
+    }
+  },
+  "trainable_positive_branches_by_split": {
+    "test": 21,
+    "train": 58,
+    "validation": 56
+  },
+  "trainable_positive_tasks_by_split": {
+    "test": [
+      "stack_block"
+    ],
+    "train": [
+      "lift_blue_block_table",
+      "lift_red_block_slider",
+      "lift_red_block_table",
+      "stack_block"
+    ],
+    "validation": [
+      "lift_pink_block_table",
+      "lift_red_block_table",
+      "stack_block"
+    ]
+  },
+  "training_admission": {
+    "fixed_action_label_replay": false,
+    "has_positive_and_negative": true,
+    "has_train_validation_test": true,
+    "integrity": true,
+    "minimum_branchable_states": true,
+    "persistent_replay": false,
+    "required_validation_task_coverage": true,
+    "trainable_positive_in_each_split": true,
+    "trusted_positive_provenance": true
+  },
+  "training_admitted": false,
+  "untrusted_positive_branch_ids": []
+}

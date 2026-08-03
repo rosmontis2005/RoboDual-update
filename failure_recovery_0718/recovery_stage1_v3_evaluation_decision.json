@@ -1,0 +1,57 @@
+{
+  "decision": "reject_for_promotion",
+  "decision_reasons": [
+    "The candidate did not improve complete paired online test success: 4/51 versus base 4/51.",
+    "Paired online changes were one gain and one loss (two-sided exact sign-test p=1.0).",
+    "The targeted stack_block task regressed from 1/24 to 0/24 despite the expanded stack recovery data."
+  ],
+  "dataset": {
+    "branchable_failure_states": 31,
+    "failure_states": 62,
+    "path": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v2_independent",
+    "training_admitted": true
+  },
+  "offline_selection": {
+    "base_fallback": false,
+    "best_step": 200,
+    "normal_gripper_drift": 0.00006273120083771963,
+    "normal_gripper_drift_gate": 0.0001,
+    "normal_prediction_drift": 0.00015124304605288458,
+    "normal_prediction_drift_gate": 0.0002,
+    "recovery_validation_base_loss": 0.27831930574701313,
+    "recovery_validation_candidate_loss": 0.2767964603184597,
+    "recovery_validation_improvement": 0.0015228454285534099,
+    "selection_admitted": true,
+    "test_normal_gripper_drift": 0.00006498991220117508,
+    "test_normal_prediction_drift": 0.0001565035294182356,
+    "test_recovery_candidate_loss": 0.4117187451406875
+  },
+  "online_paired_test": {
+    "base_success_rate": 0.0784313725490196,
+    "base_successes": 4,
+    "candidate_success_rate": 0.0784313725490196,
+    "candidate_successes": 4,
+    "exact_sign_test_two_sided_p": 1.0,
+    "lift_red_block_slider_base": 3,
+    "lift_red_block_slider_candidate": 4,
+    "paired_gains": 1,
+    "paired_losses": 1,
+    "rollouts": 51,
+    "stack_block_base": 1,
+    "stack_block_candidate": 0,
+    "success_rate_delta": 0.0
+  },
+  "promotion_gate": {
+    "normal_preservation": true,
+    "online_net_improvement": false,
+    "target_task_non_regression": false,
+    "validation_recovery_improvement": true
+  },
+  "sha256": {
+    "base_replay": "9019ef182e1505eac9bb930011cf20ec23030374db68bc4e8614920c853ffd5e",
+    "candidate_replay": "3e4a69648856246bf3aeb5deea57bf00410a48121a28f29a2ab37ca528194432",
+    "merged_ema_checkpoint": "4186f6550f66b0c1d95642690cfe0156dc80d1efae78bb7c014a9a6ff702b857",
+    "paired_comparison": "226eb95100d4b73b3e39490cc6a9411188f97307b1638f031f138d1c6a2ad3c2",
+    "training_summary": "f8639f52cfd9ee9791793635527296a90aa0be3ae574013913710ddb70125982"
+  }
+}

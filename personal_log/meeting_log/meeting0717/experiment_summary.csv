@@ -1,0 +1,5 @@
+experiment,scope,avg_seq_len,chain1,chain2,chain3,chain4,chain5
+Baseline,canonical-100,3.34,0.9,0.77,0.65,0.59,0.43
+V4,canonical-100,3.19,0.86,0.75,0.6,0.54,0.44
+V7 age8,canonical-100,3.01,0.91,0.77,0.57,0.42,0.34
+V11 age12,canonical-100,3.35,0.92,0.81,0.63,0.55,0.44

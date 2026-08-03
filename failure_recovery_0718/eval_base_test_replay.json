@@ -1,0 +1,85 @@
+{
+  "data_dir": "/home/rosmontis/Projects/dualsys/RoboDual/failure_recovery_0718/collected_failure_recovery_v1",
+  "format": "robodual_failure_recovery_replay_v1",
+  "horizon": 80,
+  "records": [
+    {
+      "failure_state_id": "s0102_t4_k096",
+      "seed": 10203324,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "place_in_slider"
+    },
+    {
+      "failure_state_id": "s0102_t4_k096",
+      "seed": 10203325,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "place_in_slider"
+    },
+    {
+      "failure_state_id": "s0102_t4_k096",
+      "seed": 10203326,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "place_in_slider"
+    },
+    {
+      "failure_state_id": "s0105_t3_k032",
+      "seed": 10501349,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_pink_block_table"
+    },
+    {
+      "failure_state_id": "s0105_t3_k032",
+      "seed": 10501350,
+      "split": "test",
+      "steps": 62,
+      "success": true,
+      "task": "lift_pink_block_table"
+    },
+    {
+      "failure_state_id": "s0105_t3_k032",
+      "seed": 10501351,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "lift_pink_block_table"
+    },
+    {
+      "failure_state_id": "s0114_t3_k120",
+      "seed": 11404104,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_right"
+    },
+    {
+      "failure_state_id": "s0114_t3_k120",
+      "seed": 11404105,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_right"
+    },
+    {
+      "failure_state_id": "s0114_t3_k120",
+      "seed": 11404106,
+      "split": "test",
+      "steps": 80,
+      "success": false,
+      "task": "push_blue_block_right"
+    }
+  ],
+  "rollouts": 9,
+  "specialist_path": "/home/rosmontis/Projects/dualsys/models/specialist/Specialist+Depth+Gripper.pt",
+  "split": "test",
+  "states": 3,
+  "success_rate": 0.1111111111111111,
+  "successes": 1
+}

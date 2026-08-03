@@ -1,0 +1,110 @@
+{
+  "canonical_100seq": [
+    {
+      "name": "Baseline",
+      "avg": 3.34,
+      "chain": [
+        0.9,
+        0.77,
+        0.65,
+        0.59,
+        0.43
+      ]
+    },
+    {
+      "name": "V4",
+      "avg": 3.19,
+      "chain": [
+        0.86,
+        0.75,
+        0.6,
+        0.54,
+        0.44
+      ]
+    },
+    {
+      "name": "V7 age8",
+      "avg": 3.01,
+      "chain": [
+        0.91,
+        0.77,
+        0.57,
+        0.42,
+        0.34
+      ]
+    },
+    {
+      "name": "V11 age12",
+      "avg": 3.35,
+      "chain": [
+        0.92,
+        0.81,
+        0.63,
+        0.55,
+        0.44
+      ]
+    }
+  ],
+  "fixed16_gate_iterations": [
+    {
+      "version": "V7",
+      "scope": "fixed-16",
+      "avg_seq_len": 3.875,
+      "delta_vs_baseline": 0.4375,
+      "transition_coverage": 0.298873845375174,
+      "passed": false
+    },
+    {
+      "version": "V8",
+      "scope": "fixed-16",
+      "avg_seq_len": 2.9375,
+      "delta_vs_baseline": -0.5,
+      "transition_coverage": 0.2787811770487775,
+      "passed": false
+    },
+    {
+      "version": "V9",
+      "scope": "fixed-16",
+      "avg_seq_len": 3.0625,
+      "delta_vs_baseline": -0.375,
+      "transition_coverage": 0.1250380594742718,
+      "passed": false
+    },
+    {
+      "version": "V10",
+      "scope": "fixed-16",
+      "avg_seq_len": 2.375,
+      "delta_vs_baseline": -1.0625,
+      "transition_coverage": 0.29212065603853654,
+      "passed": false
+    },
+    {
+      "version": "V11",
+      "scope": "fixed-16",
+      "avg_seq_len": 3.375,
+      "delta_vs_baseline": -0.0625,
+      "transition_coverage": 0.02060974451514864,
+      "passed": false
+    }
+  ],
+  "offline_gain": [
+    {
+      "version": "V5",
+      "gain": 3.63e-06,
+      "threshold": null,
+      "decision": "deployed; later failed full-100"
+    },
+    {
+      "version": "V12",
+      "gain": 2.04e-05,
+      "threshold": 0.00025,
+      "decision": "step-0 fallback"
+    },
+    {
+      "version": "V13",
+      "gain": 0.0001169,
+      "threshold": 0.0002,
+      "decision": "step-0 fallback"
+    }
+  ]
+}
