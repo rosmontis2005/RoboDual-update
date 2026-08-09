@@ -463,6 +463,11 @@ def close_env_once(env: Any) -> None:
     env.close()
     if hasattr(raw_env, "ownsPhysicsClient"):
         raw_env.ownsPhysicsClient = False
+    # PlayTableEnv.__del__ unconditionally calls self.close(), whose already-
+    # closed branch prints "does not own physics client id".  Replace only this
+    # instance's close method after the real close so finalization is silent and
+    # cannot attempt a second disconnect.
+    raw_env.close = lambda: None
 
 
 def make_full_capture(

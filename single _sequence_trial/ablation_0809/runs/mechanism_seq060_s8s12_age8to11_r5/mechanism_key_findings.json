@@ -1,0 +1,103 @@
+{
+  "validation": {
+    "observations": 80,
+    "events": 320,
+    "expected_observations": 80,
+    "expected_events": 320,
+    "noise_hashes_verified": true,
+    "condition_set": [
+      "stale_hidden_empty_ref",
+      "fresh_hidden_empty_ref",
+      "stale_hidden_fresh_ref",
+      "fresh_hidden_fresh_ref"
+    ]
+  },
+  "n_trial_seeds": 10,
+  "n_boundaries": 2,
+  "ages": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "effects_mean_ci95_seed_cluster_bootstrap": {
+    "hidden_effect_at_empty_ref": [
+      0.12538146513583412,
+      0.1191974753417048,
+      0.13125586575092593
+    ],
+    "hidden_effect_at_fresh_ref": [
+      0.022058261261843702,
+      0.02050662958069782,
+      0.02390936662223321
+    ],
+    "ref_effect_at_stale_hidden": [
+      0.1304033838710549,
+      0.12695423169218303,
+      0.13396249497349874
+    ],
+    "ref_effect_at_fresh_hidden": [
+      0.22199103336844397,
+      0.2134955181633572,
+      0.22991305516901947
+    ],
+    "hidden_ref_interaction": [
+      0.1274070008612213,
+      0.1203611181154296,
+      0.13399582587479494
+    ]
+  },
+  "context_contrasts_mean_ci95": {
+    "hidden_effect_fresh_ref_minus_empty_ref": [
+      -0.10332320387399041,
+      -0.10876174123051563,
+      -0.0977255645745419
+    ],
+    "ref_effect_fresh_hidden_minus_stale_hidden": [
+      0.09158764949738908,
+      0.0844503188065103,
+      0.09840540346406972
+    ]
+  },
+  "age11_minus_age8_mean_ci95": {
+    "hidden_effect_at_empty_ref": [
+      0.06284321142284247,
+      0.043236941144237935,
+      0.08171622771688841
+    ],
+    "ref_effect_at_stale_hidden": [
+      -0.012917674194370201,
+      -0.025424787378905734,
+      0.0005442326715289965
+    ]
+  },
+  "age_means": {
+    "hidden_effect_at_empty_ref": {
+      "8": 0.09220334158048445,
+      "9": 0.1265585518371689,
+      "10": 0.1277174141223562,
+      "11": 0.1550465530033269
+    },
+    "ref_effect_at_stale_hidden": {
+      "8": 0.13930590897696188,
+      "9": 0.1306857043335074,
+      "10": 0.12523368739115862,
+      "11": 0.1263882347825917
+    }
+  },
+  "state_means": {
+    "S8": {
+      "hidden_effect_at_empty_ref": 0.13950701632301116,
+      "ref_effect_at_stale_hidden": 0.13331188170678995
+    },
+    "S12": {
+      "hidden_effect_at_empty_ref": 0.11125591394865708,
+      "ref_effect_at_stale_hidden": 0.12749488603531983
+    }
+  },
+  "gripper_sign_changes_vs_p12_out_of_80": {
+    "fresh_hidden_empty_ref": 40,
+    "stale_hidden_fresh_ref": 13,
+    "fresh_hidden_fresh_ref": 13
+  }
+}

@@ -17,3 +17,7 @@ LoRA_trial/lora_runs/
 *.pt
 *.npy
 *.npz
+
+# Generated ablation figures (keep reports and tabular results)
+single _sequence_trial/ablation_0809/runs/**/*.png
+single _sequence_trial/ablation_0809/runs/**/*.svg

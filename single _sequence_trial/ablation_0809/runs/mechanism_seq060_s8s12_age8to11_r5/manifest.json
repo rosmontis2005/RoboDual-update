@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "design": "seq060/subtask-5 P12 current-observation hidden/ref channel attribution",
+  "sequence_index": 60,
+  "subtask_index": 4,
+  "task": "lift_pink_block_slider",
+  "policy_rollin": {
+    "name": "P12",
+    "slow_steps": "step % 12 == 0",
+    "empty_ref_after_age": 8,
+    "target_ages": [
+      8,
+      9,
+      10,
+      11
+    ]
+  },
+  "boundary_states": [
+    "S8",
+    "S12"
+  ],
+  "trial_seeds": [
+    42000,
+    42001,
+    42002,
+    42003,
+    42004,
+    42005,
+    42006,
+    42007,
+    42008,
+    42009
+  ],
+  "diffusion_seed": 809000,
+  "expected_observations": 80,
+  "expected_condition_events": 320,
+  "fixed_inputs": [
+    "restored simulator boundary per state",
+    "P12 roll-in current observation",
+    "previous static image, proprio, and four-action history",
+    "same language instruction",
+    "same specialist initial noise tensor within each frozen observation"
+  ],
+  "conditions": [
+    {
+      "condition": "stale_hidden_empty_ref",
+      "hidden": "stale",
+      "ref": "empty",
+      "intervention": false
+    },
+    {
+      "condition": "fresh_hidden_empty_ref",
+      "hidden": "fresh",
+      "ref": "empty",
+      "intervention": true
+    },
+    {
+      "condition": "stale_hidden_fresh_ref",
+      "hidden": "stale",
+      "ref": "fresh",
+      "intervention": true
+    },
+    {
+      "condition": "fresh_hidden_fresh_ref",
+      "hidden": "fresh",
+      "ref": "fresh",
+      "intervention": true
+    }
+  ],
+  "condition_semantics": {
+    "stale_hidden": "hidden_states captured by the P12 slow call at age 0",
+    "fresh_hidden": "hidden_states from one intervention slow call on the frozen current observation",
+    "empty_ref": "all-zero [1, 8, 7] local condition",
+    "fresh_ref": "the full [1, 8, 7] action chunk from that same intervention slow call",
+    "intervention_warning": "fresh/fresh, fresh/empty, and stale/fresh are attribution interventions, not deployment policies"
+  },
+  "generalist_path": "/home/rosmontis/Projects/dualsys/models/generalist",
+  "specialist_path": "/home/rosmontis/Projects/dualsys/models/specialist/Specialist+Depth+Gripper.pt",
+  "specialist_checkpoint_sha256": "46708d87386e63a4e1d364011af634fea00a9e3d5d125c655435b613e11b4559",
+  "runtime_options": {
+    "dataset_subdir": "calvin_debug_dataset",
+    "fast_num_inference_steps": 10,
+    "with_cfg": false,
+    "with_tactile": false,
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "device_map": "none",
+    "attn_implementation": "none"
+  },
+  "restore_tolerances": {
+    "observation_atol": 2e-05,
+    "position_atol": 2e-05,
+    "velocity_atol": 2e-05
+  },
+  "source_contract": {
+    "diagnostic_runner": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/ablation_0809/run_mechanism_diagnostic.py",
+      "sha256": "ade374f5758dfb1428a3293a24274018020e39166ff6d80b648832b224591130"
+    },
+    "shared_contract": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/ablation_0809/mechanism_common.py",
+      "sha256": "49a8afbe8ff44bda005ae2c73144326061d927f95695501b3fe000fad5b24cd6"
+    },
+    "cross_runner": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/cross/run_cross_experiment.py",
+      "sha256": "c7722a085998f3937e7c6c00c13316256bb81c50b9e42fd02834600ed98b494d"
+    },
+    "boundary_bundle": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/cross/boundary_states.pt",
+      "sha256": "78bfa90361b319fa18fd6414d25da47cbeeebcd91f8d10ac26b10c78f2f6c8d8"
+    },
+    "age12_collector": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/fixed_12_steps/collect_fixed_12_steps.py",
+      "sha256": "0b9bd8f66b03773aa1d0524a3439e671ee622a726879fa0a5ebe3e1567635b97"
+    },
+    "age12_evaluator": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/dual_sys_evaluation_0424test.py",
+      "sha256": "0f450418817f5def89c02c55dbb506aa9d08b8ab349cdbb913376ecbea9702a3"
+    },
+    "fast_policy": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/prismatic/models/policy/diffusion_policy.py",
+      "sha256": "4a6e9b0ad307dbada927a36707b6fdec07311da823403391ad8082a869ef4e7f"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "completed_observations": 80,
+  "expected_observations": 80,
+  "completed_condition_events": 320,
+  "expected_condition_events": 320,
+  "fixed_noise_failures": 0,
+  "trial_seeds": [
+    42000,
+    42001,
+    42002,
+    42003,
+    42004,
+    42005,
+    42006,
+    42007,
+    42008,
+    42009
+  ],
+  "states": [
+    "S8",
+    "S12"
+  ],
+  "ages": [
+    8,
+    9,
+    10,
+    11
+  ]
+}
