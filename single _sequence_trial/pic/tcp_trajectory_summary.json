@@ -1,0 +1,322 @@
+{
+  "source_runs": {
+    "Original fixed-8": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/runs/seq060_seed42_original_fixed8",
+    "Fixed age-12": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/fixed_12_steps/runs/seq060_seed42_fixed_age12"
+  },
+  "coordinate_source": "environment.{pre,post}_physics.tcp.world_link_frame_position",
+  "trajectory_convention": "initial pre-step TCP followed by every post-step TCP",
+  "figures": [
+    "subtask_00_open_drawer_tcp_trajectory.png",
+    "subtask_01_push_blue_block_left_tcp_trajectory.png",
+    "subtask_02_move_slider_left_tcp_trajectory.png",
+    "subtask_03_turn_on_lightbulb_tcp_trajectory.png",
+    "subtask_04_lift_pink_block_slider_tcp_trajectory.png",
+    "sequence_060_all_subtasks_tcp_overview.png"
+  ],
+  "subtasks": {
+    "Original fixed-8": [
+      {
+        "subtask_index": 0,
+        "task": "open_drawer",
+        "steps": 73,
+        "success": true,
+        "slow_calls": 10,
+        "empty_reference_steps": 0,
+        "tcp_start_xyz_m": [
+          0.02586795762181282,
+          -0.23131346702575684,
+          0.5712801814079285
+        ],
+        "tcp_end_xyz_m": [
+          0.2084033191204071,
+          -0.34298354387283325,
+          0.3233858048915863
+        ],
+        "tcp_path_length_m": 0.46904346973733835,
+        "tcp_net_displacement_m": 0.32747669561188697,
+        "tcp_xyz_min_m": [
+          0.02586795762181282,
+          -0.34298354387283325,
+          0.32322630286216736
+        ],
+        "tcp_xyz_max_m": [
+          0.2084033191204071,
+          -0.21265213191509247,
+          0.5712801814079285
+        ]
+      },
+      {
+        "subtask_index": 1,
+        "task": "push_blue_block_left",
+        "steps": 133,
+        "success": true,
+        "slow_calls": 17,
+        "empty_reference_steps": 0,
+        "tcp_start_xyz_m": [
+          0.2084033191204071,
+          -0.34298354387283325,
+          0.3233858048915863
+        ],
+        "tcp_end_xyz_m": [
+          -0.022491779178380966,
+          -0.10404619574546814,
+          0.4694613516330719
+        ],
+        "tcp_path_length_m": 0.837261850967796,
+        "tcp_net_displacement_m": 0.3629623508084118,
+        "tcp_xyz_min_m": [
+          -0.022491779178380966,
+          -0.4322607219219208,
+          0.323171466588974
+        ],
+        "tcp_xyz_max_m": [
+          0.2084033191204071,
+          -0.0995326042175293,
+          0.5572898387908936
+        ]
+      },
+      {
+        "subtask_index": 2,
+        "task": "move_slider_left",
+        "steps": 71,
+        "success": true,
+        "slow_calls": 9,
+        "empty_reference_steps": 0,
+        "tcp_start_xyz_m": [
+          -0.022491779178380966,
+          -0.10404619574546814,
+          0.4694613516330719
+        ],
+        "tcp_end_xyz_m": [
+          -0.11228076368570328,
+          -0.0021539342124015093,
+          0.5078314542770386
+        ],
+        "tcp_path_length_m": 0.3833005267030885,
+        "tcp_net_displacement_m": 0.14112533251010448,
+        "tcp_xyz_min_m": [
+          -0.11228076368570328,
+          -0.12099076807498932,
+          0.4692070782184601
+        ],
+        "tcp_xyz_max_m": [
+          0.05776597186923027,
+          0.0018751753959804773,
+          0.5427541732788086
+        ]
+      },
+      {
+        "subtask_index": 3,
+        "task": "turn_on_lightbulb",
+        "steps": 66,
+        "success": true,
+        "slow_calls": 9,
+        "empty_reference_steps": 0,
+        "tcp_start_xyz_m": [
+          -0.11228076368570328,
+          -0.0021539342124015093,
+          0.5078314542770386
+        ],
+        "tcp_end_xyz_m": [
+          0.31085479259490967,
+          0.023670947179198265,
+          0.5276327133178711
+        ],
+        "tcp_path_length_m": 0.5726572681911083,
+        "tcp_net_displacement_m": 0.4243851002891078,
+        "tcp_xyz_min_m": [
+          -0.12231356650590897,
+          -0.09565677493810654,
+          0.49789735674858093
+        ],
+        "tcp_xyz_max_m": [
+          0.3121756613254547,
+          0.023670947179198265,
+          0.5630295276641846
+        ]
+      },
+      {
+        "subtask_index": 4,
+        "task": "lift_pink_block_slider",
+        "steps": 240,
+        "success": false,
+        "slow_calls": 31,
+        "empty_reference_steps": 0,
+        "tcp_start_xyz_m": [
+          0.31085479259490967,
+          0.023670947179198265,
+          0.5276327133178711
+        ],
+        "tcp_end_xyz_m": [
+          0.08306174725294113,
+          0.019745752215385437,
+          0.5138868093490601
+        ],
+        "tcp_path_length_m": 1.2082607644870238,
+        "tcp_net_displacement_m": 0.2282411631095317,
+        "tcp_xyz_min_m": [
+          0.028009919449687004,
+          -0.12672539055347443,
+          0.513363242149353
+        ],
+        "tcp_xyz_max_m": [
+          0.31085479259490967,
+          0.03609068691730499,
+          0.5887431502342224
+        ]
+      }
+    ],
+    "Fixed age-12": [
+      {
+        "subtask_index": 0,
+        "task": "open_drawer",
+        "steps": 76,
+        "success": true,
+        "slow_calls": 7,
+        "empty_reference_steps": 24,
+        "tcp_start_xyz_m": [
+          0.02586795762181282,
+          -0.23131346702575684,
+          0.5712801814079285
+        ],
+        "tcp_end_xyz_m": [
+          0.22818273305892944,
+          -0.34450894594192505,
+          0.3441716432571411
+        ],
+        "tcp_path_length_m": 0.4724524421211747,
+        "tcp_net_displacement_m": 0.324534702163296,
+        "tcp_xyz_min_m": [
+          0.02586795762181282,
+          -0.34450894594192505,
+          0.3300177752971649
+        ],
+        "tcp_xyz_max_m": [
+          0.22818273305892944,
+          -0.20975828170776367,
+          0.5712801814079285
+        ]
+      },
+      {
+        "subtask_index": 1,
+        "task": "push_blue_block_left",
+        "steps": 141,
+        "success": true,
+        "slow_calls": 12,
+        "empty_reference_steps": 45,
+        "tcp_start_xyz_m": [
+          0.22818273305892944,
+          -0.34450894594192505,
+          0.3441716432571411
+        ],
+        "tcp_end_xyz_m": [
+          -0.05380728468298912,
+          -0.1083921492099762,
+          0.4857851564884186
+        ],
+        "tcp_path_length_m": 0.8115062854777192,
+        "tcp_net_displacement_m": 0.39411153108574376,
+        "tcp_xyz_min_m": [
+          -0.05380728468298912,
+          -0.42873281240463257,
+          0.34408047795295715
+        ],
+        "tcp_xyz_max_m": [
+          0.22818273305892944,
+          -0.10824879258871078,
+          0.5538594722747803
+        ]
+      },
+      {
+        "subtask_index": 2,
+        "task": "move_slider_left",
+        "steps": 74,
+        "success": true,
+        "slow_calls": 7,
+        "empty_reference_steps": 24,
+        "tcp_start_xyz_m": [
+          -0.05380728468298912,
+          -0.1083921492099762,
+          0.4857851564884186
+        ],
+        "tcp_end_xyz_m": [
+          -0.11356119811534882,
+          0.0005190086085349321,
+          0.5088385939598083
+        ],
+        "tcp_path_length_m": 0.3572187200972455,
+        "tcp_net_displacement_m": 0.12634726529330917,
+        "tcp_xyz_min_m": [
+          -0.11356119811534882,
+          -0.1113433912396431,
+          0.4857851564884186
+        ],
+        "tcp_xyz_max_m": [
+          0.03679509833455086,
+          0.0011442459654062986,
+          0.5477508306503296
+        ]
+      },
+      {
+        "subtask_index": 3,
+        "task": "turn_on_lightbulb",
+        "steps": 95,
+        "success": true,
+        "slow_calls": 8,
+        "empty_reference_steps": 31,
+        "tcp_start_xyz_m": [
+          -0.11356119811534882,
+          0.0005190086085349321,
+          0.5088385939598083
+        ],
+        "tcp_end_xyz_m": [
+          0.2884960174560547,
+          0.020161708816885948,
+          0.5337262749671936
+        ],
+        "tcp_path_length_m": 0.6749705735128397,
+        "tcp_net_displacement_m": 0.40330538916611386,
+        "tcp_xyz_min_m": [
+          -0.19969920814037323,
+          -0.08041109889745712,
+          0.5088385939598083
+        ],
+        "tcp_xyz_max_m": [
+          0.2884960174560547,
+          0.020161708816885948,
+          0.570452868938446
+        ]
+      },
+      {
+        "subtask_index": 4,
+        "task": "lift_pink_block_slider",
+        "steps": 240,
+        "success": false,
+        "slow_calls": 20,
+        "empty_reference_steps": 80,
+        "tcp_start_xyz_m": [
+          0.2884960174560547,
+          0.020161708816885948,
+          0.5337262749671936
+        ],
+        "tcp_end_xyz_m": [
+          0.11037422716617584,
+          0.0363008938729763,
+          0.4922683537006378
+        ],
+        "tcp_path_length_m": 1.1290834636265905,
+        "tcp_net_displacement_m": 0.1835935856888531,
+        "tcp_xyz_min_m": [
+          0.08299776911735535,
+          -0.04512797296047211,
+          0.474212110042572
+        ],
+        "tcp_xyz_max_m": [
+          0.29233795404434204,
+          0.060510702431201935,
+          0.5803672075271606
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "sequence_index_zero_based": 60,
+  "catalog_size": 100,
+  "initial_state_symbolic": {
+    "led": 0,
+    "lightbulb": 0,
+    "slider": "right",
+    "drawer": "closed",
+    "red_block": "slider_left",
+    "blue_block": "table",
+    "pink_block": "slider_right",
+    "grasped": 0
+  },
+  "initial_robot_obs": [
+    0.02586889,
+    -0.2313129,
+    0.5712808,
+    3.09045411,
+    -0.02908596,
+    1.50013585,
+    0.07999963,
+    -1.21779124,
+    1.03987629,
+    2.11978254,
+    -2.34205014,
+    -0.87015899,
+    1.64119093,
+    0.55344928,
+    1.0
+  ],
+  "initial_scene_obs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    -0.240851662,
+    0.0924044687,
+    0.460990009,
+    0.0,
+    0.0,
+    1.6148423282593296,
+    0.0500000896,
+    -0.120000177,
+    0.459990009,
+    0.0,
+    0.0,
+    1.2922089540585209,
+    0.070341633,
+    0.0924044687,
+    0.460990009,
+    0.0,
+    0.0,
+    1.4770603767689074
+  ],
+  "tasks": [
+    "open_drawer",
+    "push_blue_block_left",
+    "move_slider_left",
+    "turn_on_lightbulb",
+    "lift_pink_block_slider"
+  ],
+  "instructions": {
+    "open_drawer": "pull the handle to open the drawer",
+    "push_blue_block_left": "go push the blue block left",
+    "move_slider_left": "push the sliding door to the left side",
+    "turn_on_lightbulb": "use the switch to turn on the light bulb",
+    "lift_pink_block_slider": "lift the pink block from the sliding cabinet"
+  }
+}

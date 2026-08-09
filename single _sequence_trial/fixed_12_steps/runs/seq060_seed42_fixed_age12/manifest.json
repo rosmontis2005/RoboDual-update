@@ -1,0 +1,151 @@
+{
+  "catalog_size": 100,
+  "dataset_subdir": "calvin_debug_dataset",
+  "diffusion_scheduler": {
+    "_use_default_values": [
+      "set_alpha_to_one",
+      "timestep_spacing",
+      "thresholding",
+      "beta_start",
+      "clip_sample_range",
+      "trained_betas",
+      "sample_max_value",
+      "rescale_betas_zero_snr",
+      "beta_end",
+      "clip_sample",
+      "steps_offset",
+      "dynamic_thresholding_ratio"
+    ],
+    "beta_end": 0.02,
+    "beta_schedule": "squaredcos_cap_v2",
+    "beta_start": 0.0001,
+    "clip_sample": true,
+    "clip_sample_range": 1.0,
+    "dynamic_thresholding_ratio": 0.995,
+    "num_train_timesteps": 100,
+    "prediction_type": "epsilon",
+    "rescale_betas_zero_snr": false,
+    "sample_max_value": 1.0,
+    "set_alpha_to_one": true,
+    "steps_offset": 0,
+    "thresholding": false,
+    "timestep_spacing": "leading",
+    "trained_betas": null
+  },
+  "entrypoint": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/fixed_12_steps/collect_fixed_12_steps.py",
+  "ep_len": 240,
+  "files": {
+    "events": "events.jsonl",
+    "summary": "summary.json",
+    "tensor_root": "tensors"
+  },
+  "fixed_age12_contract": {
+    "action_delta_limit_ee6": 0.0,
+    "action_jerk_limit_ee6": 0.0,
+    "empty_ref_after_age": 8,
+    "empty_reference_ages": [
+      8,
+      9,
+      10,
+      11
+    ],
+    "expected_steps": [
+      0,
+      12,
+      24,
+      36,
+      48,
+      60,
+      72,
+      84,
+      96,
+      108,
+      120,
+      132,
+      144,
+      156,
+      168,
+      180,
+      192,
+      204,
+      216,
+      228
+    ],
+    "first_slow_step": 0,
+    "later_condition": "step % 12 == 0",
+    "profile_sample_var_k": 1,
+    "slow_handover_steps": 0,
+    "slow_period": 12,
+    "temporal_size": 8
+  },
+  "generalist_path": "/home/rosmontis/Projects/dualsys/models/generalist",
+  "generalist_runtime": {
+    "expected_compute_dtype": "torch.float16",
+    "load_in_4bit": true,
+    "load_in_8bit": false
+  },
+  "historical_comparison_note": "The historical age-12 selection artifact used ep_len=360. This collector intentionally keeps ep_len from the paired original-8 collection (default 240), so it reproduces the age-12 policy but not the historical run's timeout boundary.",
+  "max_subtasks": 5,
+  "paired_baseline": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/collect_original_8_steps.py",
+  "rng_note": "Uses the same original global torch RNG mechanism as the paired fixed-mod-8 collector after seed_everything(seed). The slow generalist runs with do_sample=False and normally consumes no RNG, so specialist diffusion noise remains aligned by cumulative specialist-call ordinal while both rollouts have executed the same number of environment steps. If a subtask finishes at different lengths, later subtasks start at different global RNG positions. Every actual RNG state and initial-noise tensor is recorded.",
+  "runtime_options": {
+    "attn_implementation": "none",
+    "device_map": "none",
+    "fast_num_inference_steps": 10,
+    "low_cpu_mem_usage": true,
+    "use_egl": false,
+    "with_cfg": false,
+    "with_depth": true,
+    "with_gripper": true,
+    "with_tactile": false
+  },
+  "schema_version": 1,
+  "seed": 42,
+  "sequence_index": 60,
+  "source_contract": {
+    "collector": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/fixed_12_steps/collect_fixed_12_steps.py",
+      "sha256": "0b9bd8f66b03773aa1d0524a3439e671ee622a726879fa0a5ebe3e1567635b97"
+    },
+    "dit": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/prismatic/models/policy/diffusion_transformer.py",
+      "sha256": "0dde6000e5422444677691c83e7f2a4875e2fd6497c1073a261584d2b9872f7a"
+    },
+    "environment_factory_reference": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/evaluate_calvin_0428.py",
+      "sha256": "8db3d2479154c93e6999c8764862999630fe90e6120ee84b3a7dd0ba7b68568c"
+    },
+    "evaluator": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/dual_sys_evaluation_0424test.py",
+      "sha256": "0f450418817f5def89c02c55dbb506aa9d08b8ab349cdbb913376ecbea9702a3"
+    },
+    "generalist_remote_code": {
+      "path": "/home/rosmontis/Projects/dualsys/models/generalist/modeling_prismatic.py",
+      "sha256": "87ba6557022ddfd57393aed1531a01d914ccc903230c88dce83f8907f198c848"
+    },
+    "historical_age12_entrypoint": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/evaluate_calvin_codex_test_0424test.py",
+      "sha256": "72921f52ed171c306dee0d3ebab8faf65867b49ca1b705cbf12a22904f088c22"
+    },
+    "paired_fixed8_collector": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/collect_original_8_steps.py",
+      "sha256": "b116581e8bcdb88e50d8795d5284f7f39df94999f3813bc55b193906ff3ac285"
+    },
+    "shared_trace_capture": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/trace_capture.py",
+      "sha256": "92b61b58a20ae3752497c61558d28ca7bfb412d19235442f3c96c82075f7072d"
+    },
+    "specialist": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/prismatic/models/policy/diffusion_policy.py",
+      "sha256": "4a6e9b0ad307dbada927a36707b6fdec07311da823403391ad8082a869ef4e7f"
+    },
+    "trace_capture_bridge": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/fixed_12_steps/trace_capture.py",
+      "sha256": "01c0814c8264f1e2c34b54515bf6079d850ad15d53f63756ade626152c5d8306"
+    }
+  },
+  "specialist_checkpoint_sha256": "46708d87386e63a4e1d364011af634fea00a9e3d5d125c655435b613e11b4559",
+  "specialist_path": "/home/rosmontis/Projects/dualsys/models/specialist/Specialist+Depth+Gripper.pt",
+  "started_at_unix": 1785758066.4356635,
+  "subtask_token_note": "The current model has no standalone subtask-token tensor. The canonical subtask id, language string, processor input_ids and generated token ids are stored instead."
+}

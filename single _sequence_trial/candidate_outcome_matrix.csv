@@ -1,0 +1,3 @@
+sequence_index_zero_based,sequence_number_human,fixed_mod8_original,age7_control,uniform_age12_run1,uniform_age12_run2,tasks
+36,37,5,5,4,4,close_drawer -> move_slider_left -> rotate_pink_block_left -> turn_on_led -> lift_red_block_slider
+60,61,5,5,4,4,open_drawer -> push_blue_block_left -> move_slider_left -> turn_on_lightbulb -> lift_pink_block_slider

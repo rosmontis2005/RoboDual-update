@@ -1,0 +1,16 @@
+run,subtask_index_zero_based,task,steps,success,slow_calls,expired_reference_steps,aggregation_delta_ee6_p95,jerk_l2_ee6_p95,gripper_flip_count_max
+fixed_mod8_original,0,open_drawer,67,True,9,0,0.096956,0.123789,1
+fixed_mod8_original,1,push_blue_block_left,117,True,15,0,0.11725,0.265324,1
+fixed_mod8_original,2,move_slider_left,66,True,9,0,0.091847,0.121063,1
+fixed_mod8_original,3,turn_on_lightbulb,60,True,8,0,0.080431,0.109016,1
+fixed_mod8_original,4,lift_pink_block_slider,70,True,9,0,0.108928,0.217568,2
+uniform_age12_run1,0,open_drawer,68,True,6,20,0.117914,0.148616,1
+uniform_age12_run1,1,push_blue_block_left,121,True,11,40,0.149961,0.162409,1
+uniform_age12_run1,2,move_slider_left,80,True,7,24,0.14869,0.124015,1
+uniform_age12_run1,3,turn_on_lightbulb,67,True,6,20,0.123923,0.172618,3
+uniform_age12_run1,4,lift_pink_block_slider,360,False,30,120,0.186904,0.174539,3
+uniform_age12_run2,0,open_drawer,68,True,6,20,0.117914,0.148616,1
+uniform_age12_run2,1,push_blue_block_left,121,True,11,40,0.149961,0.162409,1
+uniform_age12_run2,2,move_slider_left,80,True,7,24,0.14869,0.124015,1
+uniform_age12_run2,3,turn_on_lightbulb,67,True,6,20,0.123923,0.172618,3
+uniform_age12_run2,4,lift_pink_block_slider,360,False,30,120,0.186904,0.174539,3

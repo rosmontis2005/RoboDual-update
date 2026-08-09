@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "design": "2x2 crossed initial-state x slow-call-policy with common random numbers",
+  "cells": [
+    {
+      "state": "S8",
+      "policy": "P8",
+      "cell": "S8_P8"
+    },
+    {
+      "state": "S8",
+      "policy": "P12",
+      "cell": "S8_P12"
+    },
+    {
+      "state": "S12",
+      "policy": "P12",
+      "cell": "S12_P12"
+    },
+    {
+      "state": "S12",
+      "policy": "P8",
+      "cell": "S12_P8"
+    }
+  ],
+  "state_meaning": {
+    "S8": "fixed-8 run boundary after successful subtask 4",
+    "S12": "age-12 run boundary after successful subtask 4"
+  },
+  "policy_meaning": {
+    "P8": "original fixed-mod-8",
+    "P12": "fixed age-12 / empty-ref"
+  },
+  "sequence_index": 60,
+  "task": "lift_pink_block_slider",
+  "instruction": "lift the pink block from the sliding cabinet",
+  "ep_len": 240,
+  "model_initialization_seed": 42,
+  "trial_seeds": [
+    42000,
+    42001,
+    42002,
+    42003,
+    42004
+  ],
+  "cell_order_by_replicate": {
+    "0": [
+      "S8_P8",
+      "S8_P12",
+      "S12_P12",
+      "S12_P8"
+    ],
+    "1": [
+      "S8_P12",
+      "S12_P12",
+      "S12_P8",
+      "S8_P8"
+    ],
+    "2": [
+      "S12_P12",
+      "S12_P8",
+      "S8_P8",
+      "S8_P12"
+    ],
+    "3": [
+      "S12_P8",
+      "S8_P8",
+      "S8_P12",
+      "S12_P12"
+    ],
+    "4": [
+      "S8_P8",
+      "S8_P12",
+      "S12_P12",
+      "S12_P8"
+    ]
+  },
+  "common_random_numbers": "All four cells in a replicate reset Python, NumPy, torch CPU and all CUDA RNGs to the same trial seed immediately after state restoration and immediately before evaluator.reset(). Initial DiT noise hashes are saved per step.",
+  "policy_state_reset": "evaluator.reset() is called for every cell, matching the original start of each subtask; no policy cache from subtask 4 is restored.",
+  "restore_tolerances": {
+    "observation_atol": 2e-05,
+    "position_atol": 2e-05,
+    "velocity_atol": 2e-05
+  },
+  "full_trace_replicates": [],
+  "source_contract": {
+    "runner": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/cross/run_cross_experiment.py",
+      "sha256": "499e833440ea694b915fa56b4a34c49ae950902600f66d98ddaf03f4c0d50778"
+    },
+    "state_preparer": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/cross/prepare_boundary_states.py",
+      "sha256": "f91def2104946d937352c267dde84db48f168f397a9f5a60ad6106695992ffcc"
+    },
+    "fixed8_collector": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/collect_original_8_steps.py",
+      "sha256": "4d0680cab6c128ffc3b144b3f710f1a9980a9d31946e804569d4332eff63baa1"
+    },
+    "age12_collector": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/fixed_12_steps/collect_fixed_12_steps.py",
+      "sha256": "0b9bd8f66b03773aa1d0524a3439e671ee622a726879fa0a5ebe3e1567635b97"
+    },
+    "shared_trace_capture": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/trace_capture.py",
+      "sha256": "92b61b58a20ae3752497c61558d28ca7bfb412d19235442f3c96c82075f7072d"
+    },
+    "fixed8_evaluator": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/dual_sys_evaluation.py",
+      "sha256": "401daa5355778d16d7fd0c9da7995198d3dcb72ad117d52f48655f5b9855bccb"
+    },
+    "age12_evaluator": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/dual_sys_evaluation_0424test.py",
+      "sha256": "0f450418817f5def89c02c55dbb506aa9d08b8ab349cdbb913376ecbea9702a3"
+    },
+    "boundary_bundle": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/cross/boundary_states.pt",
+      "sha256": "78bfa90361b319fa18fd6414d25da47cbeeebcd91f8d10ac26b10c78f2f6c8d8"
+    }
+  },
+  "generalist_path": "/home/rosmontis/Projects/dualsys/models/generalist",
+  "specialist_path": "/home/rosmontis/Projects/dualsys/models/specialist/Specialist+Depth+Gripper.pt",
+  "specialist_checkpoint_sha256": "46708d87386e63a4e1d364011af634fea00a9e3d5d125c655435b613e11b4559",
+  "runtime_options": {
+    "dataset_subdir": "calvin_debug_dataset",
+    "fast_num_inference_steps": 10,
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "with_cfg": false,
+    "with_tactile": false,
+    "use_egl": false
+  }
+}

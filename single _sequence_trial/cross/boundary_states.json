@@ -1,0 +1,15 @@
+{
+  "bundle": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/cross/boundary_states.pt",
+  "bundle_sha256": "78bfa90361b319fa18fd6414d25da47cbeeebcd91f8d10ac26b10c78f2f6c8d8",
+  "schema_version": 1,
+  "sources": {
+    "S8": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/runs/seq060_seed42_original_fixed8/tensors/seq_060/subtask_04_lift_pink_block_slider/step_0000.pt",
+      "sha256": "0b086cfc149b18c53691bc2f12987facd589f1e91655b56b2a7038cdbaa74e92"
+    },
+    "S12": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/fixed_12_steps/runs/seq060_seed42_fixed_age12/tensors/seq_060/subtask_04_lift_pink_block_slider/step_0000.pt",
+      "sha256": "df14fe1780d3341af5f980da083188cc96dd32020099cef671606a288269710e"
+    }
+  }
+}

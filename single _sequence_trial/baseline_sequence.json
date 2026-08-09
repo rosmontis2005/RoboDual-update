@@ -1,0 +1,46 @@
+{
+  "sequence_index_zero_based": 60,
+  "sequence_number_human": 61,
+  "initial_state": {
+    "led": 0,
+    "lightbulb": 0,
+    "slider": "right",
+    "drawer": "closed",
+    "red_block": "slider_left",
+    "blue_block": "table",
+    "pink_block": "slider_right",
+    "grasped": 0
+  },
+  "tasks": [
+    "open_drawer",
+    "push_blue_block_left",
+    "move_slider_left",
+    "turn_on_lightbulb",
+    "lift_pink_block_slider"
+  ],
+  "selection_status": "selected_baseline",
+  "criterion": "5/5 under original fixed-mod-8 and 4/5 under both uniform age-12 artifacts",
+  "outcomes": {
+    "fixed_mod8_original": {
+      "successful_subtasks": 5,
+      "profile_source": "evaluation_results/0413exp/specialist_profile_rank0.jsonl",
+      "profile_sha256": "5a044e34292f89bd2502e419ac3cbf28b2dfbac3da472cdf55de5a366e92342a"
+    },
+    "age7_control": {
+      "successful_subtasks": 5,
+      "profile_source": "evaluation_results/0424exp/specialist_profile_rank0.jsonl",
+      "profile_sha256": "986d117de2b381aed1b5b64e2c78bffa020e5d9c81ff4b46f1ed4a2329f6ec51"
+    },
+    "uniform_age12_run1": {
+      "successful_subtasks": 4,
+      "profile_source": "evaluation_results/0425_1exp_command2/specialist_profile_rank0.jsonl",
+      "profile_sha256": "3a0e389edba96a7b651e030426c3c2c11e99193cec9f6ecb3474f752c041cdcc"
+    },
+    "uniform_age12_run2": {
+      "successful_subtasks": 4,
+      "profile_source": "evaluation_results/exp0523-0428-nostradegy-maxage12/specialist_profile_rank0.jsonl",
+      "profile_sha256": "42d6fa76bae4b8f96f2652da2bdd8e2514ad2fe9f62f2a9e880eff227cb2cf31"
+    }
+  },
+  "important_caveat": "Historical evaluations are not a paired multi-seed causal test; freeze per-sequence diffusion seeds for follow-up experiments."
+}

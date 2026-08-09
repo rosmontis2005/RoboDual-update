@@ -1,0 +1,234 @@
+{
+  "replicate": 2,
+  "trial_seed": 42002,
+  "state": "S8",
+  "policy": "P8",
+  "audit": {
+    "passed": true,
+    "errors": {
+      "robot_obs_max_abs": 0.0,
+      "scene_obs_max_abs": 4.440892098500626e-16,
+      "tcp_position_max_abs": 0.0,
+      "tcp_orientation_max_abs": 0.0,
+      "tcp_linear_velocity_max_abs": 0.0,
+      "tcp_angular_velocity_max_abs": 0.0,
+      "controller_target_pos_max_abs": 0.0,
+      "controller_target_orn_max_abs": 0.0,
+      "controller_gripper_action_max_abs": 0.0,
+      "arm_joints_position_max_abs": 0.0,
+      "arm_joints_velocity_max_abs": 0.0,
+      "gripper_joints_position_max_abs": 0.0,
+      "gripper_joints_velocity_max_abs": 0.0,
+      "object.block_red.current_pos_max_abs": 0.0,
+      "object.block_red.current_orn_max_abs": 2.117582368135751e-22,
+      "object.block_red.current_lin_vel_max_abs": 0.0,
+      "object.block_red.current_ang_vel_max_abs": 0.0,
+      "object.block_blue.current_pos_max_abs": 0.0,
+      "object.block_blue.current_orn_max_abs": 2.220446049250313e-16,
+      "object.block_blue.current_lin_vel_max_abs": 0.0,
+      "object.block_blue.current_ang_vel_max_abs": 0.0,
+      "object.block_pink.current_pos_max_abs": 0.0,
+      "object.block_pink.current_orn_max_abs": 1.1102230246251565e-16,
+      "object.block_pink.current_lin_vel_max_abs": 0.0,
+      "object.block_pink.current_ang_vel_max_abs": 0.0,
+      "scene.doors.base__slide.current_state_abs": 0.0,
+      "scene.doors.base__drawer.current_state_abs": 0.0,
+      "scene.buttons.base__button.joint_state_abs": 0.0,
+      "scene.buttons.base__button.logical_state_abs": 0.0,
+      "scene.switches.base__switch.joint_state_abs": 0.0,
+      "scene.switches.base__switch.logical_state_abs": 0.0,
+      "scene.lights.lightbulb.logical_state_abs": 0.0,
+      "scene.lights.led.logical_state_abs": 0.0
+    },
+    "violations": {}
+  },
+  "restored_physics": {
+    "arm_joints": [
+      {
+        "joint_id": 0,
+        "position": 0.036357452443833,
+        "velocity": 0.18574423403954238
+      },
+      {
+        "joint_id": 1,
+        "position": 1.220513276751897,
+        "velocity": 0.00523951087581058
+      },
+      {
+        "joint_id": 2,
+        "position": 1.4403127410411458,
+        "velocity": 0.13597745022154972
+      },
+      {
+        "joint_id": 3,
+        "position": -0.906186483552847,
+        "velocity": 0.30123362886332533
+      },
+      {
+        "joint_id": 4,
+        "position": -1.1195119806787697,
+        "velocity": 0.0476445796473145
+      },
+      {
+        "joint_id": 5,
+        "position": 1.7045696503242787,
+        "velocity": -0.025036820471213774
+      },
+      {
+        "joint_id": 6,
+        "position": 0.1962466205989008,
+        "velocity": -0.09617696548841995
+      }
+    ],
+    "gripper_joints": [
+      {
+        "joint_id": 9,
+        "position": 5.583982980254676e-06,
+        "velocity": -1.910812982325186e-05
+      },
+      {
+        "joint_id": 11,
+        "position": -3.36314987350991e-05,
+        "velocity": 0.0006393158592768672
+      }
+    ],
+    "tcp": {
+      "position": [
+        0.31085479259490967,
+        0.023670947179198265,
+        0.5276327133178711
+      ],
+      "orientation_quaternion": [
+        0.7154696583747864,
+        0.685824990272522,
+        0.11398079246282578,
+        -0.06896137446165085
+      ],
+      "linear_velocity": [
+        -0.010518022737205573,
+        0.0749778195131765,
+        0.10575785870125151
+      ],
+      "angular_velocity": [
+        0.23231909104939158,
+        0.0026030344270903272,
+        0.052518871258650734
+      ]
+    },
+    "controller": {
+      "use_target_pose": true,
+      "target_pos": [
+        0.3235359278199218,
+        0.03612908247353788,
+        0.5354304325834572
+      ],
+      "target_orn_euler": [
+        3.0854098505175114,
+        -0.2670777798753414,
+        1.5384334601539258
+      ],
+      "gripper_action": -1
+    },
+    "scene": {
+      "movable_objects": {
+        "block_red": {
+          "current_pos": [
+            -0.24086054911105675,
+            0.09248019749530202,
+            0.46099000940382084
+          ],
+          "current_orn": [
+            1.2706022119155569e-06,
+            -1.3262361390940463e-06,
+            0.722116489957931,
+            0.6917714759423549
+          ],
+          "current_lin_vel": [
+            -2.8362823078554607e-16,
+            -3.856521215539251e-16,
+            3.837208328860697e-15
+          ],
+          "current_ang_vel": [
+            2.1506787279982133e-14,
+            -2.760572561020925e-15,
+            3.0545197735171385e-15
+          ]
+        },
+        "block_blue": {
+          "current_pos": [
+            -0.053288517048701835,
+            -0.13181935570206677,
+            0.45983409881442633
+          ],
+          "current_orn": [
+            -0.0019082402604587965,
+            -0.0036155569747082818,
+            0.8023540107964345,
+            0.596834422370012
+          ],
+          "current_lin_vel": [
+            0.0019261107331181371,
+            -0.0065014801487612425,
+            -0.00047912573485007354
+          ],
+          "current_ang_vel": [
+            0.3257901765260267,
+            0.09629526056763392,
+            0.0023588137148637623
+          ]
+        },
+        "block_pink": {
+          "current_pos": [
+            0.0703130041284967,
+            0.09244200915247164,
+            0.460990009268296
+          ],
+          "current_orn": [
+            1.358068932723906e-06,
+            -1.236429359365503e-06,
+            0.6732155887033983,
+            0.7394462597940191
+          ],
+          "current_lin_vel": [
+            4.905960967801877e-16,
+            3.240791542270847e-16,
+            4.3298697960381105e-15
+          ],
+          "current_ang_vel": [
+            -1.1717821882760635e-14,
+            2.4788006139928454e-14,
+            4.800624209735014e-15
+          ]
+        }
+      },
+      "doors": {
+        "base__slide": {
+          "current_state": 0.1595422926100954
+        },
+        "base__drawer": {
+          "current_state": 0.20381458696341234
+        }
+      },
+      "buttons": {
+        "base__button": {
+          "joint_state": 0.0,
+          "logical_state": 0
+        }
+      },
+      "switches": {
+        "base__switch": {
+          "joint_state": 0.04641933431891587,
+          "logical_state": 1
+        }
+      },
+      "lights": {
+        "lightbulb": {
+          "logical_state": 1
+        },
+        "led": {
+          "logical_state": 0
+        }
+      }
+    }
+  }
+}

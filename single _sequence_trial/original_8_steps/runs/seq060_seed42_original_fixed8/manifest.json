@@ -1,0 +1,144 @@
+{
+  "catalog_size": 100,
+  "dataset_subdir": "calvin_debug_dataset",
+  "diffusion_scheduler": {
+    "_use_default_values": [
+      "dynamic_thresholding_ratio",
+      "sample_max_value",
+      "set_alpha_to_one",
+      "steps_offset",
+      "beta_end",
+      "timestep_spacing",
+      "trained_betas",
+      "clip_sample",
+      "clip_sample_range",
+      "rescale_betas_zero_snr",
+      "beta_start",
+      "thresholding"
+    ],
+    "beta_end": 0.02,
+    "beta_schedule": "squaredcos_cap_v2",
+    "beta_start": 0.0001,
+    "clip_sample": true,
+    "clip_sample_range": 1.0,
+    "dynamic_thresholding_ratio": 0.995,
+    "num_train_timesteps": 100,
+    "prediction_type": "epsilon",
+    "rescale_betas_zero_snr": false,
+    "sample_max_value": 1.0,
+    "set_alpha_to_one": true,
+    "steps_offset": 0,
+    "thresholding": false,
+    "timestep_spacing": "leading",
+    "trained_betas": null
+  },
+  "entrypoint": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/collect_original_8_steps.py",
+  "ep_len": 240,
+  "files": {
+    "events": "events.jsonl",
+    "summary": "summary.json",
+    "tensor_root": "tensors"
+  },
+  "fixed_mod8_contract": {
+    "action_delta_limit_ee6": 0.0,
+    "action_jerk_limit_ee6": 0.0,
+    "expected_steps": [
+      0,
+      7,
+      15,
+      23,
+      31,
+      39,
+      47,
+      55,
+      63,
+      71,
+      79,
+      87,
+      95,
+      103,
+      111,
+      119,
+      127,
+      135,
+      143,
+      151,
+      159,
+      167,
+      175,
+      183,
+      191,
+      199,
+      207,
+      215,
+      223,
+      231,
+      239
+    ],
+    "first_slow_step": 0,
+    "later_condition": "(step + 1) % 8 == 0",
+    "profile_sample_var_k": 1,
+    "slow_handover_steps": 0,
+    "temporal_size": 8
+  },
+  "generalist_path": "/home/rosmontis/Projects/dualsys/models/generalist",
+  "generalist_runtime": {
+    "expected_compute_dtype": "torch.float16",
+    "load_in_4bit": true,
+    "load_in_8bit": false
+  },
+  "max_subtasks": 5,
+  "rng_note": "Uses the original global torch RNG mechanism after seed_everything(seed); no per-step generator is injected. This targeted run does not consume the torch/CUDA random draws from canonical sequences 0..59, so it is a new standalone seed-42 trace rather than a bitwise replay of historical 0413 sequence 60. Every actual RNG state and initial noise tensor used in this run is recorded.",
+  "runtime_options": {
+    "attn_implementation": "none",
+    "device_map": "none",
+    "fast_num_inference_steps": 10,
+    "low_cpu_mem_usage": true,
+    "use_egl": false,
+    "with_cfg": false,
+    "with_depth": true,
+    "with_gripper": true,
+    "with_tactile": false
+  },
+  "schema_version": 1,
+  "seed": 42,
+  "sequence_index": 60,
+  "source_contract": {
+    "collector": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/collect_original_8_steps.py",
+      "sha256": "b116581e8bcdb88e50d8795d5284f7f39df94999f3813bc55b193906ff3ac285"
+    },
+    "dit": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/prismatic/models/policy/diffusion_transformer.py",
+      "sha256": "0dde6000e5422444677691c83e7f2a4875e2fd6497c1073a261584d2b9872f7a"
+    },
+    "environment_factory_reference": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/evaluate_calvin_0428.py",
+      "sha256": "8db3d2479154c93e6999c8764862999630fe90e6120ee84b3a7dd0ba7b68568c"
+    },
+    "evaluator": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/dual_sys_evaluation.py",
+      "sha256": "401daa5355778d16d7fd0c9da7995198d3dcb72ad117d52f48655f5b9855bccb"
+    },
+    "generalist_remote_code": {
+      "path": "/home/rosmontis/Projects/dualsys/models/generalist/modeling_prismatic.py",
+      "sha256": "87ba6557022ddfd57393aed1531a01d914ccc903230c88dce83f8907f198c848"
+    },
+    "legacy_evaluation_entrypoint": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/vla-scripts/evaluate_calvin_codex_test.py",
+      "sha256": "483445b9752d9a1e8bb31240664e753bf90281ded044b50ce3981ecfc2171925"
+    },
+    "specialist": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/prismatic/models/policy/diffusion_policy.py",
+      "sha256": "4a6e9b0ad307dbada927a36707b6fdec07311da823403391ad8082a869ef4e7f"
+    },
+    "trace_capture": {
+      "path": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/original_8_steps/trace_capture.py",
+      "sha256": "1d03f93a7050bcf2d70b3f5b225dcff33f1b474f3ce66c83f171abfe488d89e3"
+    }
+  },
+  "specialist_checkpoint_sha256": "46708d87386e63a4e1d364011af634fea00a9e3d5d125c655435b613e11b4559",
+  "specialist_path": "/home/rosmontis/Projects/dualsys/models/specialist/Specialist+Depth+Gripper.pt",
+  "started_at_unix": 1785746802.9492793,
+  "subtask_token_note": "The current model has no standalone subtask-token tensor. The canonical subtask id, language string, processor input_ids and generated token ids are stored instead."
+}

@@ -1,0 +1,73 @@
+{
+  "run_dir": "/home/rosmontis/Projects/dualsys/RoboDual/single _sequence_trial/cross/runs/cross_seq060_r5",
+  "replicates": 5,
+  "trial_seeds": [
+    42000,
+    42001,
+    42002,
+    42003,
+    42004
+  ],
+  "restore_audit_passed": true,
+  "common_random_number_audit_passed": true,
+  "failure_classification_thresholds": {
+    "minimum_block_motion_m": 0.005,
+    "minimum_block_lift_m": 0.01
+  },
+  "failure_counts": {
+    "$S_8, P_8$": {
+      "成功": 4,
+      "未有效接近/接触": 1,
+      "接触或推动但未抬升": 0,
+      "抬升后仍未成功": 0
+    },
+    "$S_8, P_{12}$": {
+      "成功": 2,
+      "未有效接近/接触": 2,
+      "接触或推动但未抬升": 1,
+      "抬升后仍未成功": 0
+    },
+    "$S_{12}, P_8$": {
+      "成功": 4,
+      "未有效接近/接触": 0,
+      "接触或推动但未抬升": 1,
+      "抬升后仍未成功": 0
+    },
+    "$S_{12}, P_{12}$": {
+      "成功": 3,
+      "未有效接近/接触": 0,
+      "接触或推动但未抬升": 1,
+      "抬升后仍未成功": 1
+    },
+    "fixed-8  $P_8$": {
+      "成功": 8,
+      "未有效接近/接触": 1,
+      "接触或推动但未抬升": 1,
+      "抬升后仍未成功": 0
+    },
+    "age-12  $P_{12}$": {
+      "成功": 5,
+      "未有效接近/接触": 2,
+      "接触或推动但未抬升": 2,
+      "抬升后仍未成功": 1
+    },
+    "状态 $S_8$": {
+      "成功": 6,
+      "未有效接近/接触": 3,
+      "接触或推动但未抬升": 1,
+      "抬升后仍未成功": 0
+    },
+    "状态 $S_{12}$": {
+      "成功": 7,
+      "未有效接近/接触": 0,
+      "接触或推动但未抬升": 2,
+      "抬升后仍未成功": 1
+    }
+  },
+  "figures": [
+    "01_factorial_success_overview.png",
+    "02_paired_main_and_interaction_effects.png",
+    "03_tcp_distance_and_block_lift_dynamics.png",
+    "04_failure_stage_decomposition.png"
+  ]
+}

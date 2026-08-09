@@ -1,0 +1,145 @@
+{
+  "generator_contract": {
+    "source": "/home/rosmontis/Projects/dualsys/calvin/calvin_models/calvin_agent/evaluation/multistep_sequences.py",
+    "function": "get_sequences(num_sequences)",
+    "determinism": "temp_seed(0), deterministic per-state seeds, then deterministic shuffle",
+    "scope": "Calls with the same num_sequences=100 return the same ordered list; changing num_sequences can change the list/order."
+  },
+  "100_line_result_files": 24,
+  "100_line_result_file_paths": [
+    "evaluation_results/0412exp/success_rate_rank0.txt",
+    "evaluation_results/0413exp/success_rate_rank0.txt",
+    "evaluation_results/0424exp/success_rate_rank0.txt",
+    "evaluation_results/0425_1exp_command2/success_rate_rank0.txt",
+    "evaluation_results/0425_2exp_command3/success_rate_rank0.txt",
+    "evaluation_results/exp0518_interval=13/success_rate_rank0.txt",
+    "evaluation_results/exp0518_interval=14/success_rate_rank0.txt",
+    "evaluation_results/exp0523-0428-nostradegy-maxage12/success_rate_rank0.txt",
+    "evaluation_results/exp0524-0428-risk_balanced-maxage12/success_rate_rank0.txt",
+    "evaluation_results/exp0524-0428-risk_conservative-maxage12/success_rate_rank0.txt",
+    "evaluation_results/exp0524-0428-risk_score-maxage12/success_rate_rank0.txt",
+    "evaluation_results/exp0525-0428-risk_conservative-diagnose-maxage12/success_rate_rank0.txt",
+    "evaluation_results/exp0526-0428-risk_balanced-minage10-maxage12/success_rate_rank0.txt",
+    "evaluation_results/exp0526-0428-risk_conservative-minage10-maxage12/success_rate_rank0.txt",
+    "evaluation_results/exp0526-0525-task_age/success_rate_rank0.txt",
+    "evaluation_results/exp0609-0428(edited)-slow_handover_steps 4 --slow_handover_blend_hidden/success_rate_rank0.txt",
+    "evaluation_results/exp0713_LoRA_v2/success_rate_rank0.txt",
+    "evaluation_results/exp0713_LoRA_v3/success_rate_rank0.txt",
+    "evaluation_results/exp0713_LoRA_v4_100seq/success_rate_rank0.txt",
+    "evaluation_results/exp0715_LoRA_v11_gated_100seq/success_rate_rank0.txt",
+    "evaluation_results/exp0716_LoRA_v7_gated_100seq/success_rate_rank0.txt",
+    "evaluation_results/task_age_transition_smooth_0710/seed42_delta018_jerk024_cap018/success_rate_rank0.txt",
+    "evaluation_results/trial_smooth_RTConly_v1_0708/seed42_old_last_ref_steps2_ee6_0709/success_rate_rank0.txt",
+    "evaluation_results/trial_smooth_RTConly_v1_0708/seed42_old_last_ref_steps4_ee6_0708/success_rate_rank0.txt"
+  ],
+  "full_100_sequence_profiles_audited": 21,
+  "profile_audit": [
+    {
+      "profile": "evaluation_results/0412exp/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 100,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/0413exp/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 381,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/0424exp/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 391,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/0425_1exp_command2/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 380,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/0425_2exp_command3/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 339,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0518_interval=13/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 376,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0518_interval=14/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 370,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0523-0428-nostradegy-maxage12/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 380,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0524-0428-risk_balanced-maxage12/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 372,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0524-0428-risk_conservative-maxage12/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 382,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0524-0428-risk_score-maxage12/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 358,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0525-0428-risk_conservative-diagnose-maxage12/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 382,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0526-0428-risk_balanced-minage10-maxage12/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 371,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0526-0428-risk_conservative-minage10-maxage12/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 369,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0526-0525-task_age/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 391,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0609-0428(edited)-slow_handover_steps 4 --slow_handover_blend_hidden/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 338,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0713_LoRA_v2/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 280,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/exp0713_LoRA_v3/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 345,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/task_age_transition_smooth_0710/seed42_delta018_jerk024_cap018/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 383,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/trial_smooth_RTConly_v1_0708/seed42_old_last_ref_steps2_ee6_0709/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 385,
+      "mismatches": 0
+    },
+    {
+      "profile": "evaluation_results/trial_smooth_RTConly_v1_0708/seed42_old_last_ref_steps4_ee6_0708/specialist_profile_rank0.jsonl",
+      "compared_reached_tasks": 363,
+      "mismatches": 0
+    }
+  ],
+  "total_task_mismatches_on_shared_reached_positions": 0,
+  "mismatch_details": []
+}
