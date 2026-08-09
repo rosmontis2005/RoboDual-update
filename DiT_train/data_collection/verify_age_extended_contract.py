@@ -93,6 +93,8 @@ def verify_run(run_dir: Path) -> dict[str, Any]:
           "generalist loader source mismatch", "generalist")
     check(manifest.get("generalist_accelerator_prepare") is False,
           "generalist unexpectedly uses Accelerator.prepare", "generalist")
+    check(manifest.get("generalist_action_normalization_source") == collector.GENERALIST_ACTION_NORMALIZATION_SOURCE,
+          "generalist action normalization source mismatch", "generalist")
     check(manifest.get("unique_anchors") == len(anchors), "manifest anchor count mismatch", "counts")
     check(manifest.get("unique_conditions") == len(anchors), "manifest condition count mismatch", "counts")
     check(manifest.get("total_samples") == len(samples), "manifest sample count mismatch", "counts")
@@ -135,7 +137,7 @@ def verify_run(run_dir: Path) -> dict[str, Any]:
         for field in (
             "generalist_path", "generalist_checkpoint_fingerprint", "processor_tokenizer_fingerprint",
             "generalist_dtype", "generalist_quantization", "code_git_commit", "collector_schema_version",
-            "generalist_loader_source",
+            "generalist_loader_source", "generalist_action_normalization_source",
         ):
             check(bool(condition.get(field)), f"{condition_id}: missing {field}", "condition")
         check(condition.get("collector_schema_version") == collector.SCHEMA_VERSION,
@@ -144,6 +146,19 @@ def verify_run(run_dir: Path) -> dict[str, Any]:
               f"{condition_id}: loader source mismatch", "generalist")
         check(condition.get("generalist_accelerator_prepare") is False,
               f"{condition_id}: Accelerator.prepare must be false", "generalist")
+        check(condition.get("generalist_action_normalization_source") == collector.GENERALIST_ACTION_NORMALIZATION_SOURCE,
+              f"{condition_id}: action normalization source mismatch", "generalist")
+        normalization = condition.get("slow_action_normalization", {})
+        channels = normalization.get("raw_channels_per_step")
+        check(normalization.get("normalized_shape") == [1, 8, 7],
+              f"{condition_id}: normalized action shape metadata", "generalist")
+        check(isinstance(channels, int) and channels >= 7,
+              f"{condition_id}: raw action channels metadata", "generalist")
+        if isinstance(channels, int):
+            check(normalization.get("raw_numel") == 8 * channels,
+                  f"{condition_id}: raw action numel metadata", "generalist")
+            check(normalization.get("extra_channels_dropped_per_step") == channels - 7,
+                  f"{condition_id}: dropped action channels metadata", "generalist")
         if condition_id in anchor_by_condition:
             anchor = anchor_by_condition[condition_id]
             expected_frames = collector.required_source_frames(

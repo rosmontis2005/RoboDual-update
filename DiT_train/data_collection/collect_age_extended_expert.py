@@ -38,6 +38,10 @@ DEFAULT_GENERALIST = Path(__file__).resolve().parents[3] / "models" / "generalis
 DEFAULT_OUTPUT = Path(__file__).resolve().parent / "runs" / "test_50anchors"
 PROMPT_SOURCE = "vla-scripts/dual_sys_evaluation_0424test.py:get_openvla_prompt"
 GENERALIST_LOADER_SOURCE = "vla-scripts/task_age_v1_0706.py:load_generalist"
+GENERALIST_ACTION_NORMALIZATION_SOURCE = (
+    "vla-scripts/dual_sys_evaluation_0424test.py:step + "
+    "single _sequence_trial/ablation_0809/mechanism_common.py:normalize_generalist_action"
+)
 
 
 def json_dump(path: Path, value: Any) -> None:
@@ -139,6 +143,46 @@ def build_reference(slow_action: Any, age: int):
     return ref, count, mask
 
 
+def normalize_generalist_action(value: Any):
+    """Match deployment: reshape 8 frames, then retain the first 7 channels."""
+    import torch
+
+    action = torch.as_tensor(value).detach().to(torch.float32)
+    raw_shape = list(action.shape)
+    raw_numel = int(action.numel())
+    if action.ndim == 1:
+        action = action.unsqueeze(0)
+    if action.ndim == 2:
+        flattened_width = int(action.shape[1])
+        if flattened_width % ACTION_CHUNK:
+            raise AssertionError(
+                f"Generalist action width {flattened_width} is not divisible by chunk size {ACTION_CHUNK}; "
+                f"raw_shape={raw_shape}"
+            )
+        action = action.reshape(action.shape[0], ACTION_CHUNK, -1)
+    if action.ndim != 3 or int(action.shape[0]) != 1 or int(action.shape[1]) != ACTION_CHUNK:
+        raise AssertionError(
+            "Expected one generalist action with shape [F*D], [1,F*D], or [1,F,D] "
+            f"and F={ACTION_CHUNK}; got raw_shape={raw_shape}, reshaped={tuple(action.shape)}"
+        )
+    raw_channels_per_step = int(action.shape[2])
+    if raw_channels_per_step < ACTION_DIM:
+        raise AssertionError(
+            f"Generalist action has {raw_channels_per_step} channels per step; expected at least {ACTION_DIM}"
+        )
+    normalized = action[:, :, :ACTION_DIM].contiguous().cpu()
+    metadata = {
+        "raw_shape": raw_shape,
+        "raw_numel": raw_numel,
+        "raw_channels_per_step": raw_channels_per_step,
+        "normalized_shape": list(normalized.shape),
+        "normalization": "reshape_to_[1,8,D]_then_take_channels_0_to_6",
+        "extra_channels_dropped_per_step": raw_channels_per_step - ACTION_DIM,
+        "source": GENERALIST_ACTION_NORMALIZATION_SOURCE,
+    }
+    return normalized, metadata
+
+
 def cpu_contract_test() -> dict[str, Any]:
     import torch
 
@@ -156,7 +200,32 @@ def cpu_contract_test() -> dict[str, Any]:
         rows.append({"age": age, "ref_valid_count": count})
     assert rows[7]["ref_valid_count"] == 1
     assert rows[8]["ref_valid_count"] == 0
-    return {"status": "passed", "ages": rows, "transition_7_to_8": [1, 0]}
+    raw_56 = torch.arange(56, dtype=torch.float32)
+    normalized_56, metadata_56 = normalize_generalist_action(raw_56)
+    assert tuple(normalized_56.shape) == (1, 8, 7)
+    assert metadata_56["raw_channels_per_step"] == 7
+    raw_64 = torch.arange(64, dtype=torch.float32)
+    normalized_64, metadata_64 = normalize_generalist_action(raw_64)
+    assert tuple(normalized_64.shape) == (1, 8, 7)
+    assert torch.equal(normalized_64, raw_64.reshape(1, 8, 8)[:, :, :7])
+    assert metadata_64["raw_channels_per_step"] == 8
+    assert metadata_64["extra_channels_dropped_per_step"] == 1
+    try:
+        normalize_generalist_action(torch.arange(63, dtype=torch.float32))
+    except AssertionError:
+        invalid_width_rejected = True
+    else:
+        invalid_width_rejected = False
+    assert invalid_width_rejected
+    return {
+        "status": "passed", "ages": rows, "transition_7_to_8": [1, 0],
+        "generalist_action_normalization": {
+            "flat_56_to": list(normalized_56.shape),
+            "flat_64_to": list(normalized_64.shape),
+            "flat_64_dropped_channels_per_step": 1,
+            "invalid_flat_63_rejected": invalid_width_rejected,
+        },
+    }
 
 
 class CalvinExpertIndex:
@@ -399,14 +468,11 @@ def infer_condition(model, processor, model_dtype, rgb_static: np.ndarray, instr
     if not isinstance(output, tuple) or len(output) < 2:
         raise RuntimeError("Generalist predict_action must return (action, hidden_states) from one call")
     raw_action, raw_hidden = output[0], output[1]
-    action = torch.as_tensor(raw_action).detach()
-    if action.numel() != ACTION_CHUNK * ACTION_DIM:
-        raise AssertionError(f"Generalist action has {action.numel()} values, expected 56")
-    action = action.reshape(1, ACTION_CHUNK, -1)[:, :, :ACTION_DIM].to(torch.float32).cpu()
+    action, action_normalization = normalize_generalist_action(raw_action)
     hidden = torch.as_tensor(raw_hidden).detach().cpu()
     if hidden.ndim != 3 or hidden.shape[0] != 1 or hidden.shape[1] <= 0 or hidden.shape[2] <= 0:
         raise AssertionError(f"Illegal slow_hidden shape {tuple(hidden.shape)}")
-    return action, hidden.to(torch.float16), call_id
+    return action, hidden.to(torch.float16), call_id, action_normalization
 
 
 def make_sample(
@@ -531,6 +597,16 @@ def audit_in_memory(anchors, conditions, samples, inference_calls: int) -> dict[
         condition = conditions[cid]
         if tuple(condition["slow_action"].shape) != (1, 8, 7):
             failures.append(f"{cid}: slow_action shape")
+        normalization = condition.get("slow_action_normalization")
+        if normalization is not None:
+            channels = normalization.get("raw_channels_per_step")
+            if (
+                normalization.get("normalized_shape") != [1, 8, 7]
+                or not isinstance(channels, int)
+                or channels < 7
+                or normalization.get("raw_numel") != 8 * channels
+            ):
+                failures.append(f"{cid}: slow_action normalization metadata")
         if condition["slow_hidden"].ndim != 3 or condition["hidden_seq_len"] != condition["slow_hidden"].shape[1]:
             failures.append(f"{cid}: slow_hidden shape/length")
         if condition["source"] != CONDITION_SOURCE or not condition["same_inference_call"]:
@@ -644,6 +720,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         "code_git_commit": git_commit(repo_root), "collector_schema_version": SCHEMA_VERSION,
         "generalist_loader_source": GENERALIST_LOADER_SOURCE,
         "generalist_accelerator_prepare": False,
+        "generalist_action_normalization_source": GENERALIST_ACTION_NORMALIZATION_SOURCE,
     }
     conditions: dict[str, dict[str, Any]] = {}
     samples: list[dict[str, Any]] = []
@@ -654,7 +731,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         source_cache = load_anchor_source_cache(index, anchor)
         source_frames_loaded += len(source_cache)
         anchor_data = source_cache[anchor["anchor_frame"]]
-        slow_action, slow_hidden, call_id = infer_condition(
+        slow_action, slow_hidden, call_id, action_normalization = infer_condition(
             model, processor, model_dtype, anchor_data["rgb_static"], anchor["instruction"]
         )
         inference_calls += 1
@@ -669,6 +746,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
             "anchor_observation_reference": index.frame_ref(anchor["anchor_frame"], "rgb_static"),
             "required_source_frames": sorted(source_cache),
             "slow_action": slow_action, "slow_hidden": slow_hidden,
+            "slow_action_normalization": action_normalization,
             "hidden_seq_len": int(slow_hidden.shape[1]), "hidden_width": int(slow_hidden.shape[2]),
             "source": CONDITION_SOURCE, "inference_call_id": call_id,
             "slow_action_inference_call_id": call_id, "slow_hidden_inference_call_id": call_id,
@@ -703,6 +781,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         "prompt_source": PROMPT_SOURCE, "processor_call": "processor(prompt, PIL.Image.fromarray(anchor_rgb_static))",
         "generalist_loader_source": GENERALIST_LOADER_SOURCE,
         "generalist_accelerator_prepare": False,
+        "generalist_action_normalization_source": GENERALIST_ACTION_NORMALIZATION_SOURCE,
         "generalist_inference": "model.eval(); torch.inference_mode(); predict_action(**inputs, do_sample=False)",
         "generalist_path": str(Path(args.generalist_path).expanduser().resolve()),
         "generalist_dtype": str(model_dtype),

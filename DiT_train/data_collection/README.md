@@ -15,6 +15,8 @@ predict_action(..., do_sample=False)
 
 同一次调用返回的 `slow_action [1,8,7]` 与 `slow_hidden [1,T,H]` 被存入一个 `condition_XXXXXX.pt`。同一 condition 派生 age `d=0..11` 的 12 个 samples；每个 sample 的 current observation 是 frame `t+d`，label 是 CALVIN expert 的 `t+d .. t+d+7` relative actions。
 
+当前 checkpoint 的 `predict_action` 可能返回 flat 64 values（8 steps × 8 raw channels）。collector 与 P12 evaluator 一致，先 reshape 为 `[1,8,8]`，再取每步前 7 个 deployment action channels，最终保存 `[1,8,7]`；raw shape、channel 数和裁剪数量会写入 condition provenance。flat 56 values 同样被支持，其他不合法宽度 fail-fast。
+
 P12 reference contract：
 
 ```text
