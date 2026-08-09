@@ -37,6 +37,7 @@ DEFAULT_DATASET_ROOT = DEFAULT_CALVIN_ROOT / "dataset" / "calvin_debug_dataset"
 DEFAULT_GENERALIST = Path(__file__).resolve().parents[3] / "models" / "generalist"
 DEFAULT_OUTPUT = Path(__file__).resolve().parent / "runs" / "test_50anchors"
 PROMPT_SOURCE = "vla-scripts/dual_sys_evaluation_0424test.py:get_openvla_prompt"
+GENERALIST_LOADER_SOURCE = "vla-scripts/task_age_v1_0706.py:load_generalist"
 
 
 def json_dump(path: Path, value: Any) -> None:
@@ -179,12 +180,12 @@ class CalvinExpertIndex:
         self.tasks = [str(item) for item in data["language"]["task"]]
         if not (len(self.bounds) == len(self.instructions) == len(self.tasks)):
             raise AssertionError("CALVIN language annotation arrays have inconsistent lengths")
-        examples = sorted(self.split_dir.glob("episode_*.npz"))
-        if not examples:
+        example = next(self.split_dir.glob("episode_*.npz"), None)
+        if example is None:
             raise FileNotFoundError(f"No episode_*.npz files in {self.split_dir}")
-        match = re.match(r"^(.*?)(\d+)(\.npz)$", examples[0].name)
+        match = re.match(r"^(.*?)(\d+)(\.npz)$", example.name)
         if not match:
-            raise ValueError(f"Cannot infer CALVIN frame naming from {examples[0]}")
+            raise ValueError(f"Cannot infer CALVIN frame naming from {example}")
         self.prefix, digits, self.suffix = match.groups()
         self.n_digits = len(digits)
 
@@ -243,17 +244,43 @@ def select_anchors(index: CalvinExpertIndex, max_anchors: int, per_episode: int,
     rng = random.Random(seed)
     pools: dict[str, list[dict[str, Any]]] = defaultdict(list)
     invalid = Counter()
+    source_candidates_probed = 0
+    required_source_files_checked = 0
+    missing_frame_examples: list[str] = []
     for episode in index.episode_rows():
         if episode["valid_anchor_count"] <= 0:
             invalid["subtask_shorter_than_19_positions"] += 1
             continue
         frames = list(range(episode["valid_anchor_first"], episode["valid_anchor_last_inclusive"] + 1))
         rng.shuffle(frames)
-        for frame in frames[:per_episode]:
+        accepted = 0
+        for frame in frames:
+            source_candidates_probed += 1
+            source_frames = required_source_frames(episode["task_start_frame"], frame)
+            missing = []
+            for source_frame in source_frames:
+                required_source_files_checked += 1
+                if not index.frame_path(source_frame).is_file():
+                    missing.append(source_frame)
+            if missing:
+                invalid["candidate_missing_required_source_frame"] += 1
+                if len(missing_frame_examples) < 10:
+                    missing_frame_examples.append(
+                        f"episode={episode['language_episode_index']} anchor={frame} missing={missing[:5]}"
+                    )
+                continue
             row = dict(episode)
             row["anchor_frame"] = frame
             row["anchor_task_local_step"] = frame - episode["task_start_frame"]
+            row["required_source_frame_first"] = source_frames[0]
+            row["required_source_frame_last"] = source_frames[-1]
+            row["required_source_frame_count"] = len(source_frames)
             pools[episode["task"]].append(row)
+            accepted += 1
+            if accepted >= per_episode:
+                break
+        if accepted == 0:
+            invalid["language_episode_without_source_complete_anchor"] += 1
     task_order = sorted(pools, key=lambda task: hashlib.sha256(f"{seed}:{task}".encode()).hexdigest())
     for task in task_order:
         rng.shuffle(pools[task])
@@ -277,6 +304,9 @@ def select_anchors(index: CalvinExpertIndex, max_anchors: int, per_episode: int,
         "split_counts": dict(sorted(Counter(row["split"] for row in selected).items())),
         "language_episodes_scanned": len(index.bounds),
         "ineligible_episode_reasons": dict(invalid),
+        "source_candidates_probed": source_candidates_probed,
+        "required_source_files_checked": required_source_files_checked,
+        "missing_frame_examples": missing_frame_examples,
         "shortfall": max(0, max_anchors - len(selected)),
         "shortfall_reason": None if len(selected) == max_anchors else "eligible anchors exhausted under per-episode cap",
     }
@@ -290,23 +320,34 @@ def selected_proprio(robot_obs: np.ndarray) -> np.ndarray:
     return np.concatenate([robot_obs[:6], robot_obs[-1:]]).astype(np.float32)
 
 
+def required_source_frames(task_start: int, anchor_frame: int) -> list[int]:
+    """Union of history, observations, and targets needed by all 12 ages."""
+    return list(range(max(task_start, anchor_frame - HISTORY), anchor_frame + max(AGES) + ACTION_CHUNK))
+
+
+def load_anchor_source_cache(index: CalvinExpertIndex, anchor: dict[str, Any]) -> dict[int, dict[str, np.ndarray]]:
+    expected = required_source_frames(anchor["task_start_frame"], anchor["anchor_frame"])
+    if expected[0] != anchor["required_source_frame_first"] or expected[-1] != anchor["required_source_frame_last"]:
+        raise AssertionError(f"{anchor['condition_id']}: selected source range changed")
+    return {frame: index.load_frame(frame) for frame in expected}
+
+
 def vector_delta(anchor: np.ndarray, current: np.ndarray) -> dict[str, Any]:
     difference = np.asarray(current, dtype=np.float32) - np.asarray(anchor, dtype=np.float32)
     return {"vector": difference.tolist(), "l2_norm": float(np.linalg.norm(difference))}
 
 
-def history_for(index: CalvinExpertIndex, task_start: int, current: int):
+def history_for(source_cache: dict[int, dict[str, np.ndarray]], task_start: int, current: int):
     history = np.zeros((HISTORY, ACTION_DIM), dtype=np.float32)
     source_indices = list(range(max(task_start, current - HISTORY), current))
     if source_indices:
-        actions = [np.asarray(index.load_frame(frame)["rel_actions"], dtype=np.float32) for frame in source_indices]
+        actions = [np.asarray(source_cache[frame]["rel_actions"], dtype=np.float32) for frame in source_indices]
         history[-len(actions):] = np.stack(actions)
     return history, source_indices
 
 
 def load_generalist(args: argparse.Namespace):
     import torch
-    from accelerate import Accelerator
     from transformers import AutoModelForVision2Seq, AutoProcessor, BitsAndBytesConfig
 
     quantization = None
@@ -331,11 +372,6 @@ def load_generalist(args: argparse.Namespace):
         kwargs["attn_implementation"] = args.attn_implementation
     processor = AutoProcessor.from_pretrained(args.generalist_path, trust_remote_code=True)
     model = AutoModelForVision2Seq.from_pretrained(args.generalist_path, **kwargs).eval()
-    accelerator = Accelerator()
-    if args.device_map == "none":
-        if not torch.cuda.is_available():
-            raise RuntimeError("Generalist collection requires CUDA; use --dry_run or --cpu_contract_test on CPU")
-        model = accelerator.prepare(model, device_placement=[True])
     model.eval()
     return model, processor, model_dtype
 
@@ -373,18 +409,25 @@ def infer_condition(model, processor, model_dtype, rgb_static: np.ndarray, instr
     return action, hidden.to(torch.float16), call_id
 
 
-def make_sample(index: CalvinExpertIndex, anchor: dict[str, Any], age: int, slow_action, materialize_dir: Path | None):
+def make_sample(
+    index: CalvinExpertIndex,
+    anchor: dict[str, Any],
+    age: int,
+    slow_action,
+    source_cache: dict[int, dict[str, np.ndarray]],
+    materialize_dir: Path | None,
+):
     current = anchor["anchor_frame"] + age
     start, end = anchor["task_start_frame"], anchor["task_end_frame_inclusive"]
     previous = current if current == start else current - 1
-    current_data = index.load_frame(current)
-    anchor_data = index.load_frame(anchor["anchor_frame"])
-    history, history_indices = history_for(index, start, current)
+    current_data = source_cache[current]
+    anchor_data = source_cache[anchor["anchor_frame"]]
+    history, history_indices = history_for(source_cache, start, current)
     target_indices = list(range(current, current + ACTION_CHUNK))
     if target_indices[-1] > end:
         raise AssertionError("Target crosses language subtask boundary")
     target = np.stack([
-        np.asarray(index.load_frame(frame)["rel_actions"], dtype=np.float32) for frame in target_indices
+        np.asarray(source_cache[frame]["rel_actions"], dtype=np.float32) for frame in target_indices
     ])
     ref, count, mask = build_reference(slow_action, age)
     sample_id = f"{anchor['condition_id']}_age_{age:02d}"
@@ -397,7 +440,7 @@ def make_sample(index: CalvinExpertIndex, anchor: dict[str, Any], age: int, slow
     }
     materialized = None
     if materialize_dir is not None:
-        previous_data = index.load_frame(previous)
+        previous_data = source_cache[previous]
         materialized = f"observations/{sample_id}.npz"
         np.savez_compressed(
             materialize_dir / f"{sample_id}.npz",
@@ -599,13 +642,18 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
             "attn_implementation": args.attn_implementation,
         },
         "code_git_commit": git_commit(repo_root), "collector_schema_version": SCHEMA_VERSION,
+        "generalist_loader_source": GENERALIST_LOADER_SOURCE,
+        "generalist_accelerator_prepare": False,
     }
     conditions: dict[str, dict[str, Any]] = {}
     samples: list[dict[str, Any]] = []
     anchor_rows: list[dict[str, Any]] = []
     inference_calls = 0
+    source_frames_loaded = 0
     for anchor in anchors:
-        anchor_data = index.load_frame(anchor["anchor_frame"])
+        source_cache = load_anchor_source_cache(index, anchor)
+        source_frames_loaded += len(source_cache)
+        anchor_data = source_cache[anchor["anchor_frame"]]
         slow_action, slow_hidden, call_id = infer_condition(
             model, processor, model_dtype, anchor_data["rgb_static"], anchor["instruction"]
         )
@@ -619,6 +667,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
             "anchor_absolute_frame_index": anchor["anchor_frame"],
             "anchor_task_local_step": anchor["anchor_task_local_step"],
             "anchor_observation_reference": index.frame_ref(anchor["anchor_frame"], "rgb_static"),
+            "required_source_frames": sorted(source_cache),
             "slow_action": slow_action, "slow_hidden": slow_hidden,
             "hidden_seq_len": int(slow_hidden.shape[1]), "hidden_width": int(slow_hidden.shape[2]),
             "source": CONDITION_SOURCE, "inference_call_id": call_id,
@@ -631,8 +680,14 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         torch.save(condition, stage / "conditions" / f"{anchor['condition_id']}.pt")
         anchor_rows.append({**anchor, "condition_path": f"conditions/{anchor['condition_id']}.pt"})
         for age in AGES:
-            samples.append(make_sample(index, anchor, age, slow_action, observation_dir))
+            samples.append(make_sample(index, anchor, age, slow_action, source_cache, observation_dir))
     audit = audit_in_memory(anchors, conditions, samples, inference_calls)
+    expected_source_loads = sum(anchor["required_source_frame_count"] for anchor in anchors)
+    if source_frames_loaded != expected_source_loads:
+        raise AssertionError(
+            f"Per-anchor cache load audit failed: loaded={source_frames_loaded}, expected={expected_source_loads}"
+        )
+    audit["source_frames_loaded_once_per_anchor"] = source_frames_loaded
     inspection = inspect_anchor(samples)
     manifest = {
         "schema_version": SCHEMA_VERSION, "created_at": datetime.now(timezone.utc).isoformat(),
@@ -646,6 +701,8 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         "condition_source": CONDITION_SOURCE, "target_source": TARGET_SOURCE,
         "prompt_template": "In: What action should the robot take to {instruction.lower()}?\\nOut:",
         "prompt_source": PROMPT_SOURCE, "processor_call": "processor(prompt, PIL.Image.fromarray(anchor_rgb_static))",
+        "generalist_loader_source": GENERALIST_LOADER_SOURCE,
+        "generalist_accelerator_prepare": False,
         "generalist_inference": "model.eval(); torch.inference_mode(); predict_action(**inputs, do_sample=False)",
         "generalist_path": str(Path(args.generalist_path).expanduser().resolve()),
         "generalist_dtype": str(model_dtype),
@@ -659,6 +716,11 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         "fingerprints": fingerprints, "code_git_commit": shared_provenance["code_git_commit"],
         "collector_file_sha256": sha256_file(Path(__file__).resolve()),
         "selection": scan,
+        "partial_source_dataset": {
+            "supported": True,
+            "selection_requires_all_anchor_source_frames_to_exist": True,
+            "per_anchor_cache": "each required source frame is loaded exactly once and reused for all 12 ages",
+        },
         "split_rule": "SHA256(trajectory_id) bucket: train<70, validation<85, else test",
         "anchor_legality": "inclusive CALVIN subtask end; anchor <= end-(11+8-1) = end-18",
         "benchmark_exclusion": "not applicable: official generated benchmark sequence fingerprints do not identify expert annotation episodes",

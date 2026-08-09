@@ -73,6 +73,7 @@ def verify_run(run_dir: Path) -> dict[str, Any]:
     anchors = read_jsonl(run_dir / "anchors.jsonl")
     samples = read_jsonl(run_dir / "samples.jsonl")
     dataset_root = Path(manifest["dataset_root"])
+    source_index = collector.CalvinExpertIndex(dataset_root, "training")
     failures: list[str] = []
     checked = Counter()
 
@@ -88,6 +89,10 @@ def verify_run(run_dir: Path) -> dict[str, Any]:
     check(manifest.get("target_source") == collector.TARGET_SOURCE, "target source mismatch", "source")
     check(manifest.get("condition_source") == collector.CONDITION_SOURCE, "condition source mismatch", "source")
     check(manifest.get("generalist_inference", "").endswith("predict_action(**inputs, do_sample=False)"), "non-runtime inference declaration", "generalist")
+    check(manifest.get("generalist_loader_source") == collector.GENERALIST_LOADER_SOURCE,
+          "generalist loader source mismatch", "generalist")
+    check(manifest.get("generalist_accelerator_prepare") is False,
+          "generalist unexpectedly uses Accelerator.prepare", "generalist")
     check(manifest.get("unique_anchors") == len(anchors), "manifest anchor count mismatch", "counts")
     check(manifest.get("unique_conditions") == len(anchors), "manifest condition count mismatch", "counts")
     check(manifest.get("total_samples") == len(samples), "manifest sample count mismatch", "counts")
@@ -130,10 +135,24 @@ def verify_run(run_dir: Path) -> dict[str, Any]:
         for field in (
             "generalist_path", "generalist_checkpoint_fingerprint", "processor_tokenizer_fingerprint",
             "generalist_dtype", "generalist_quantization", "code_git_commit", "collector_schema_version",
+            "generalist_loader_source",
         ):
             check(bool(condition.get(field)), f"{condition_id}: missing {field}", "condition")
         check(condition.get("collector_schema_version") == collector.SCHEMA_VERSION,
               f"{condition_id}: condition schema mismatch", "condition")
+        check(condition.get("generalist_loader_source") == collector.GENERALIST_LOADER_SOURCE,
+              f"{condition_id}: loader source mismatch", "generalist")
+        check(condition.get("generalist_accelerator_prepare") is False,
+              f"{condition_id}: Accelerator.prepare must be false", "generalist")
+        if condition_id in anchor_by_condition:
+            anchor = anchor_by_condition[condition_id]
+            expected_frames = collector.required_source_frames(
+                anchor["task_start_frame"], anchor["anchor_frame"]
+            )
+            check(condition.get("required_source_frames") == expected_frames,
+                  f"{condition_id}: required source frame range mismatch", "source")
+            check(all(source_index.frame_path(frame).is_file() for frame in expected_frames),
+                  f"{condition_id}: required source frame missing", "source")
 
     check(len(inference_ids) == len(conditions), "inference call IDs are not unique per anchor", "generalist")
 

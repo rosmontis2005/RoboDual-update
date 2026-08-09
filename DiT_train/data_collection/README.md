@@ -30,6 +30,10 @@ CALVIN language annotation 的 `(start,end)` 是 inclusive。最大 age 11 的 8
 start <= t <= end - 18
 ```
 
+anchor selection 还会检查 union source range `max(task_start,t-4)..t+18` 中每个 `.npz` 是否真实存在。annotation 合法但 source frame 缺失的候选会被跳过并计入 dry-run shortfall，因此可直接用于只保留部分 episode/frame 的 partial source dataset。
+
+正式采集时，这段 union range 对每个 anchor 只加载一次；12 个 ages 的 observation、history 和 target 全部复用同一个内存 cache，不会按 age 重复读取 frame。
+
 ## 输出
 
 ```text
@@ -62,11 +66,13 @@ PYTHONDONTWRITEBYTECODE=1 python \
   --max_anchors 50 --max_anchors_per_episode 2 --seed 42
 ```
 
-`--dry_run` 只扫描 annotation/index、计算合法 anchor、stable trajectory split 和 task distribution；不会加载 processor/model，也不会创建 output。
+`--dry_run` 只扫描 annotation/index、计算合法 anchor、stable trajectory split 和 task distribution；不会加载 processor/model，也不会创建 output。它同时报告 probed candidate 数、required-file 检查数和缺失 frame 示例。
 
 ## 1–2 anchor GPU smoke
 
 当前部署/最新 mechanism diagnostic 使用 4-bit NF4、FP16 compute，因此 collector 默认启用相同配置：
+
+generalist loader 与 `vla-scripts/task_age_v1_0706.py::load_generalist` 对齐：直接执行 `AutoModelForVision2Seq.from_pretrained(...).eval()`，4-bit placement 交给 Transformers/BitsAndBytes，不额外调用 `Accelerator.prepare()`。
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 \
@@ -110,6 +116,7 @@ TOKENIZERS_PARALLELISM=false \
 - `DiskCalvinDataset` 为原始训练随机选择 `pred_actions=0..7`，其训练覆盖约 d=0..7，且原实现的 previous/history 是窗口内部构造；本 collector 显式使用 annotation subtask boundary，保留 anchor 之前的真实 expert history，并扩展到 d=11。
 - transition collector 保存 successful online policy rollout、scheduler 自然产生的 age bucket 与 committed policy action target；本 collector 不做 rollout，固定一个 expert anchor condition 后成对派生完整 12 ages，target 始终来自官方 expert demonstration。
 - official CALVIN benchmark sequence fingerprint 是 simulator initial-state/task sequence 的 fingerprint，无法可靠映射到 language annotation expert episode；因此这里不伪造 exclusion match，而在 manifest 中明确记录“不适用”。数据源被硬限制为 training split。
+- partial source dataset 被显式支持：缺少任一 required frame 的窗口会在 anchor selection/dry-run 阶段被排除，不会进入 condition inference。
 
 ## 独立 verifier 检查
 
