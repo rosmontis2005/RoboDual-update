@@ -1,0 +1,204 @@
+{
+  "age7_valid_count": 1,
+  "age8_valid_count": 0,
+  "checks": 18,
+  "cpu_contract": {
+    "ages": [
+      {
+        "age": 0,
+        "ref_valid_count": 8
+      },
+      {
+        "age": 1,
+        "ref_valid_count": 7
+      },
+      {
+        "age": 2,
+        "ref_valid_count": 6
+      },
+      {
+        "age": 3,
+        "ref_valid_count": 5
+      },
+      {
+        "age": 4,
+        "ref_valid_count": 4
+      },
+      {
+        "age": 5,
+        "ref_valid_count": 3
+      },
+      {
+        "age": 6,
+        "ref_valid_count": 2
+      },
+      {
+        "age": 7,
+        "ref_valid_count": 1
+      },
+      {
+        "age": 8,
+        "ref_valid_count": 0
+      },
+      {
+        "age": 9,
+        "ref_valid_count": 0
+      },
+      {
+        "age": 10,
+        "ref_valid_count": 0
+      },
+      {
+        "age": 11,
+        "ref_valid_count": 0
+      }
+    ],
+    "generalist_action_normalization": {
+      "flat_56_to": [
+        1,
+        8,
+        7
+      ],
+      "flat_64_dropped_channels_per_step": 1,
+      "flat_64_to": [
+        1,
+        8,
+        7
+      ],
+      "invalid_flat_63_rejected": true
+    },
+    "status": "passed",
+    "transition_7_to_8": [
+      1,
+      0
+    ]
+  },
+  "expected_samples": 7200,
+  "failures": [],
+  "generalist_inference_calls": 600,
+  "independent_verifier": {
+    "checks_by_category": {
+      "age": 22200,
+      "audit": 1,
+      "condition": 31200,
+      "counts": 7,
+      "freshness": 72000,
+      "generalist": 6005,
+      "history": 28800,
+      "manifest": 5,
+      "modalities": 1,
+      "observation": 72000,
+      "previous": 7200,
+      "reference": 32400,
+      "shape": 23400,
+      "source": 22803,
+      "split": 7801,
+      "target": 21600
+    },
+    "checks_executed": 347423,
+    "status": "passed"
+  },
+  "inspection": {
+    "ages": [
+      {
+        "age": 0,
+        "anchor_frame": 564548,
+        "current_frame": 564548,
+        "history_indices": [
+          564544,
+          564545,
+          564546,
+          564547
+        ],
+        "previous_frame": 564547,
+        "ref_valid_count": 8,
+        "target_indices": [
+          564548,
+          564549,
+          564550,
+          564551,
+          564552,
+          564553,
+          564554,
+          564555
+        ]
+      },
+      {
+        "age": 7,
+        "anchor_frame": 564548,
+        "current_frame": 564555,
+        "history_indices": [
+          564551,
+          564552,
+          564553,
+          564554
+        ],
+        "previous_frame": 564554,
+        "ref_valid_count": 1,
+        "target_indices": [
+          564555,
+          564556,
+          564557,
+          564558,
+          564559,
+          564560,
+          564561,
+          564562
+        ]
+      },
+      {
+        "age": 8,
+        "anchor_frame": 564548,
+        "current_frame": 564556,
+        "history_indices": [
+          564552,
+          564553,
+          564554,
+          564555
+        ],
+        "previous_frame": 564555,
+        "ref_valid_count": 0,
+        "target_indices": [
+          564556,
+          564557,
+          564558,
+          564559,
+          564560,
+          564561,
+          564562,
+          564563
+        ]
+      },
+      {
+        "age": 11,
+        "anchor_frame": 564548,
+        "current_frame": 564559,
+        "history_indices": [
+          564555,
+          564556,
+          564557,
+          564558
+        ],
+        "previous_frame": 564558,
+        "ref_valid_count": 0,
+        "target_indices": [
+          564559,
+          564560,
+          564561,
+          564562,
+          564563,
+          564564,
+          564565,
+          564566
+        ]
+      }
+    ],
+    "condition_id": "condition_000000"
+  },
+  "source_frames_loaded_once_per_anchor": 13657,
+  "status": "passed",
+  "total_samples": 7200,
+  "trajectory_split_leakage": false,
+  "unique_anchors": 600,
+  "unique_conditions": 600
+}
