@@ -650,9 +650,17 @@ def main(args):
     seed_everything(42)
     profiler.mark("seed_everything_done")
 
-    # Accelerator is intentionally initialized AFTER the 4-bit generalist.
-    # This keeps from_pretrained() on the already verified standalone path.
-
+    kwargs = InitProcessGroupKwargs(timeout=timedelta(hours=12))
+    acc = Accelerator(kwargs_handlers=[kwargs])
+    device = acc.device
+    profiler.mark(
+        "accelerator_initialized",
+        {
+            "device": str(device),
+            "num_processes": acc.num_processes,
+            "process_index": acc.process_index,
+        },
+    )
 
 
     # Load generalist policy
@@ -670,13 +678,13 @@ def main(args):
     elif args.load_in_8bit:
         quantization_config = BitsAndBytesConfig(load_in_8bit=True)
         model_dtype = torch.float16
+    processor = AutoProcessor.from_pretrained(args.generalist_path, trust_remote_code=True)
     model_kwargs = dict(
         torch_dtype=model_dtype,
         quantization_config=quantization_config,
+        low_cpu_mem_usage=args.low_cpu_mem_usage,
         trust_remote_code=True,
     )
-    if args.low_cpu_mem_usage:
-        model_kwargs["low_cpu_mem_usage"] = True
     if args.device_map != "none":
         model_kwargs["device_map"] = args.device_map
     if args.attn_implementation != "none":
@@ -691,32 +699,11 @@ def main(args):
             "low_cpu_mem_usage": args.low_cpu_mem_usage,
         },
     )
+    processor = AutoProcessor.from_pretrained(args.generalist_path, trust_remote_code=True)
+    profiler.mark("processor_loaded", {"generalist_path": args.generalist_path})
     model = AutoModelForVision2Seq.from_pretrained(args.generalist_path, **model_kwargs)
     model.eval()
     profiler.mark("generalist_loaded")
-
-    # Load processor only once, after the generalist has been materialized.
-    processor = AutoProcessor.from_pretrained(
-        args.generalist_path,
-        trust_remote_code=True,
-    )
-    profiler.mark(
-        "processor_loaded",
-        {"generalist_path": args.generalist_path},
-    )
-
-    # Initialize Accelerator only after the verified 4-bit load path.
-    kwargs = InitProcessGroupKwargs(timeout=timedelta(hours=12))
-    acc = Accelerator(kwargs_handlers=[kwargs])
-    device = acc.device
-    profiler.mark(
-        "accelerator_initialized",
-        {
-            "device": str(device),
-            "num_processes": acc.num_processes,
-            "process_index": acc.process_index,
-        },
-    )
 
     # Load specialist policy
     from prismatic.models.policy.diffusion_policy import DiffusionDiTImagePolicy
@@ -753,14 +740,8 @@ def main(args):
     dual_sys.ema_fast_system.load_state_dict(specialist_state, strict=False)
     profiler.mark("specialist_state_dict_applied")
 
-    if acc.num_processes == 1:
-        # Generalist is already placed by the 4-bit Transformers/bnb loader,
-        # and specialist has already been moved to `device`.
-        # Avoid a second model-placement pass through Accelerator.
-        profiler.mark("accelerate_prepare_skipped_single_process")
-    else:
-        dual_sys = acc.prepare(dual_sys, device_placement=[True])
-        profiler.mark("accelerate_prepare_done")
+    dual_sys = acc.prepare(dual_sys, device_placement=[True])
+    profiler.mark("accelerate_prepare_done")
 
     save_path = REPO_ROOT / 'evaluation_results'
     observation_space = {

@@ -1,0 +1,23 @@
+{
+  "evaluator_checkpoint": "/home/rosmontis/Projects/dualsys/RoboDual-update/DiT_train/runs/ageext_m1_long1500_b97f005/specialist_ema_step_001500.pt",
+  "global_optimizer_step": 1500,
+  "round_trip": {
+    "missing_keys": [],
+    "tensor_comparisons": {
+      "depth_encoder.transformer.layers.5.1.net.1.bias": {
+        "allclose": true,
+        "exact": true
+      },
+      "model.final_layer.adaLN_modulation.1.bias": {
+        "allclose": true,
+        "exact": true
+      },
+      "vision_encoder.cls_token": {
+        "allclose": true,
+        "exact": true
+      }
+    },
+    "unexpected_keys": []
+  },
+  "training_checkpoint": "/home/rosmontis/Projects/dualsys/RoboDual-update/DiT_train/runs/ageext_m1_long1500_b97f005/training_state_step_001500.pt"
+}

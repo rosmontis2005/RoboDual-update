@@ -10,12 +10,10 @@ from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
 
-import torchtune
 import draccus
 import torch
 import torch.distributed as dist
 import tqdm
-import wandb
 from ema_pytorch import EMA
 from accelerate import PartialState, Accelerator
 from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
@@ -210,6 +208,8 @@ class FinetuneConfig:
 
 @draccus.wrap()
 def finetune(cfg: FinetuneConfig) -> None:
+    # Training-only dependency; evaluation does not need wandb
+    import wandb
     # [Validate] Ensure GPU Available & Set Device / Distributed Context
     assert torch.cuda.is_available(), "Fine-tuning assumes at least one GPU is available!"
     distributed_state = PartialState()
@@ -307,6 +307,9 @@ def finetune(cfg: FinetuneConfig) -> None:
 
     groups = [{'params': dual_system.parameters(), 'lr': 1e-4}]
     optimizer = AdamW(groups, lr=cfg.learning_rate, weight_decay=1e-3)
+
+    # torchtune is only needed for training, not evaluation
+    import torchtune
 
     scheduler = torchtune.modules.get_cosine_schedule_with_warmup(
                                                         optimizer = optimizer, 

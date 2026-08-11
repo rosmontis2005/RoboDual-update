@@ -1,0 +1,66 @@
+{
+  "fixed_sample_count": 900,
+  "groups": {
+    "age_0_7": {
+      "diffusion_noise_mse": 0.0658484508265974,
+      "first_action_ee6_rmse": 0.16289392593705582,
+      "first_action_gripper_sign_accuracy": 0.8816666666666667,
+      "n": 600
+    },
+    "age_10": {
+      "diffusion_noise_mse": 0.026319673815742135,
+      "first_action_ee6_rmse": 0.13973342999240124,
+      "first_action_gripper_sign_accuracy": 0.9466666666666667,
+      "n": 75
+    },
+    "age_11": {
+      "diffusion_noise_mse": 0.03085456448296706,
+      "first_action_ee6_rmse": 0.1362495189140223,
+      "first_action_gripper_sign_accuracy": 0.9866666666666667,
+      "n": 75
+    },
+    "age_8": {
+      "diffusion_noise_mse": 0.025560267955685657,
+      "first_action_ee6_rmse": 0.1479490553925287,
+      "first_action_gripper_sign_accuracy": 0.92,
+      "n": 75
+    },
+    "age_8_11": {
+      "diffusion_noise_mse": 0.026587124305466812,
+      "first_action_ee6_rmse": 0.14357255319074697,
+      "first_action_gripper_sign_accuracy": 0.9566666666666667,
+      "n": 300
+    },
+    "age_9": {
+      "diffusion_noise_mse": 0.023613990967472395,
+      "first_action_ee6_rmse": 0.14991339588427088,
+      "first_action_gripper_sign_accuracy": 0.9733333333333334,
+      "n": 75
+    }
+  },
+  "noise_protocol_examples": [
+    {
+      "derived_seed": 3972578590963427554,
+      "noise_sha256": "02dd0e85ff3d7518c8367dd09f7501ff7fbfa1f33e0d346f0eabf3e2036119a5",
+      "sample_id": "condition_000004_age_00"
+    },
+    {
+      "derived_seed": 7618485969505020780,
+      "noise_sha256": "b118cfae9b16e3d5a749ba1b460a0a4aa1d41493f99ac1376acaf268eb043daa",
+      "sample_id": "condition_000004_age_01"
+    },
+    {
+      "derived_seed": 1415835914828572831,
+      "noise_sha256": "3234d514a212626ee5c247afdbbf5400ba4a07e1801f5b640e42b5e69757e8fa",
+      "sample_id": "condition_000004_age_02"
+    },
+    {
+      "derived_seed": 5925975128532630237,
+      "noise_sha256": "f6975dc2f9eef664076eb5085d5bd43f4920ed9b50403e184793f7d10f428a29",
+      "sample_id": "condition_000004_age_03"
+    }
+  ],
+  "optimizer_step": 20,
+  "validation_seed": 20260810,
+  "validation_timestep": 50
+}
