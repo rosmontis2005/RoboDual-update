@@ -21,3 +21,4 @@ LoRA_trial/lora_runs/
 # Generated ablation figures (keep reports and tabular results)
 single _sequence_trial/ablation_0809/runs/**/*.png
 single _sequence_trial/ablation_0809/runs/**/*.svg
+DiT_train/0818_expert_history_ablation/runs/
