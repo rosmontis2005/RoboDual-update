@@ -23,3 +23,4 @@ single _sequence_trial/ablation_0809/runs/**/*.png
 single _sequence_trial/ablation_0809/runs/**/*.svg
 DiT_train/0818_expert_history_ablation/runs/
 DiT_train/0818_expert_specialist_trajectory/runs/
+DiT_train/0820_drift_condition_intervention/runs/

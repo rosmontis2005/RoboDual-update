@@ -43,9 +43,15 @@ ACTION_DIM = 7
 ACTION_HORIZON = 8
 EXPECTED_AGES = list(range(ACTION_STEPS))
 EXPECTED_COUNTS = [8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0]
+ALLOWED_EMA_COMPATIBILITY_KEYS = {
+    "online_model._dummy_variable",
+    "ema_model._dummy_variable",
+}
 STATE_METRICS = (
     "robot_full_l2", "robot_max_abs", "robot_ee6_l2", "robot_ee6_max_abs",
     "scene_l2", "scene_max_abs", "rgb_static_mae", "rgb_gripper_mae",
+    "depth_static_mae", "depth_static_rmse",
+    "depth_gripper_mae", "depth_gripper_rmse",
 )
 ACTION_METRICS = (
     "closed_loop_action_ee6_l2_to_expert",
@@ -85,6 +91,25 @@ def sha256_file(path: Path, block_size: int = 8 << 20) -> str:
         while block := stream.read(block_size):
             digest.update(block)
     return digest.hexdigest()
+
+
+def classify_checkpoint_keys(
+    missing_keys: Iterable[str], unexpected_keys: Iterable[str],
+) -> dict[str, list[str]]:
+    raw_missing = list(missing_keys)
+    raw_unexpected = list(unexpected_keys)
+    ignored = sorted(
+        key for key in raw_unexpected if key in ALLOWED_EMA_COMPATIBILITY_KEYS
+    )
+    return {
+        "missing_keys": raw_missing,
+        "unexpected_keys": [
+            key for key in raw_unexpected if key not in ALLOWED_EMA_COMPATIBILITY_KEYS
+        ],
+        "raw_missing_keys": raw_missing,
+        "raw_unexpected_keys": raw_unexpected,
+        "ignored_ema_compatibility_keys": ignored,
+    }
 
 
 def git_commit() -> str:
@@ -409,11 +434,18 @@ def load_models(args: argparse.Namespace):
     dual_system = DualSystem(generalist, specialist, tokenizer)
     checkpoint = torch.load(args.specialist_path, map_location="cpu", weights_only=False)
     incompatible = dual_system.ema_fast_system.load_state_dict(checkpoint, strict=False)
+    key_audit = classify_checkpoint_keys(
+        incompatible.missing_keys, incompatible.unexpected_keys
+    )
     checkpoint_audit = {
         "path": str(args.specialist_path),
         "sha256": sha256_file(args.specialist_path),
-        "missing_keys": list(incompatible.missing_keys),
-        "unexpected_keys": list(incompatible.unexpected_keys),
+        **key_audit,
+        "allowed_ema_compatibility_keys": sorted(ALLOWED_EMA_COMPATIBILITY_KEYS),
+        "compatibility_key_rationale": (
+            "EMA wrapper placeholder keys are ignored by the current strict=False evaluator loader; "
+            "train_age_extended_expert.py also excludes ema_model._dummy_variable."
+        ),
         "checkpoint_type": type(checkpoint).__name__,
         "specialist_architecture_source": "vla-scripts/evaluate_calvin_0428.py",
     }
@@ -534,6 +566,14 @@ def state_metrics(actual: Mapping[str, Any], expert: Mapping[str, Any]) -> dict[
         np.asarray(actual["rgb_gripper"], dtype=np.float32)
         - np.asarray(expert["rgb_gripper"], dtype=np.float32)
     )
+    depth_static_delta = (
+        np.asarray(actual["depth_static"], dtype=np.float32)
+        - np.asarray(expert["depth_static"], dtype=np.float32)
+    )
+    depth_gripper_delta = (
+        np.asarray(actual["depth_gripper"], dtype=np.float32)
+        - np.asarray(expert["depth_gripper"], dtype=np.float32)
+    )
     return {
         "robot_full_l2": float(np.linalg.norm(robot_delta)),
         "robot_max_abs": float(np.max(np.abs(robot_delta))),
@@ -543,6 +583,10 @@ def state_metrics(actual: Mapping[str, Any], expert: Mapping[str, Any]) -> dict[
         "scene_max_abs": float(np.max(np.abs(scene_delta))),
         "rgb_static_mae": float(np.mean(np.abs(static_delta))),
         "rgb_gripper_mae": float(np.mean(np.abs(gripper_delta))),
+        "depth_static_mae": float(np.mean(np.abs(depth_static_delta))),
+        "depth_static_rmse": float(np.sqrt(np.mean(np.square(depth_static_delta)))),
+        "depth_gripper_mae": float(np.mean(np.abs(depth_gripper_delta))),
+        "depth_gripper_rmse": float(np.sqrt(np.mean(np.square(depth_gripper_delta)))),
     }
 
 

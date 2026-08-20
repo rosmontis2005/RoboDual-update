@@ -131,6 +131,12 @@ and asserts:
     output;
 11. history corruption/ablation is absent.
 
+The current M1 EMA checkpoint contains the wrapper-only placeholder keys
+`online_model._dummy_variable` and `ema_model._dummy_variable`. They are loaded
+with the evaluator's existing `strict=False` contract, recorded under
+`raw_unexpected_keys` and `ignored_ema_compatibility_keys`, and do not count as
+architecture mismatches. Any other missing or unexpected key remains fatal.
+
 Replay fidelity has no hidden pass threshold. Actual errors are always written
 to the output. In particular, the script does not relax a tolerance to make a
 preflight pass.
@@ -174,9 +180,12 @@ Each run is written under `runs/<run_name>/`:
 
 Robot metrics include full-vector L2/max-absolute and end-effector-first-six
 L2/max-absolute. Scene metrics include L2/max-absolute. RGB metrics are raw pixel
-MAE. Action metrics use the first six continuous channels; gripper agreement
-compares signs. `aggregation_delta_ee6` is taken from the deployment evaluator's
-profile, not recomputed from an unexecuted action shortcut.
+MAE. Depth metrics include `depth_static_mae`, `depth_static_rmse`,
+`depth_gripper_mae`, and `depth_gripper_rmse`; they compare the raw persisted and
+simulator depth values before the evaluator's normalization. Action metrics use
+the first six continuous channels; gripper agreement compares signs.
+`aggregation_delta_ee6` is taken from the deployment evaluator's profile, not
+recomputed from an unexecuted action shortcut.
 
 ## Interpretation criteria
 
