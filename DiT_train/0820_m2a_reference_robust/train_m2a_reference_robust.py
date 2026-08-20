@@ -62,8 +62,8 @@ DEFAULT_DATA_DIR = REPO_ROOT / "DiT_train/data_collection/runs/ageext_expert_600
 DEFAULT_PROCESSOR_PATH = REPO_ROOT.parent / "models/generalist"
 DEFAULT_M1_CHECKPOINT = REPO_ROOT / "DiT_train/runs/ageext_m1_long1500_b97f005/specialist_ema_step_001500.pt"
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "runs/m2a_reference_robust_s42"
-VALIDATION_MODES = ("persisted", "zero_ref_hidden_kept", "zero_ref_hidden_null")
-VIEW_NAMES = ("persisted", "zero_ref_hidden_kept", "zero_ref_hidden_null", "shortened_reference")
+VALIDATION_MODES = ("persisted", "zero_ref_hidden_kept")
+SELECTABLE_COUNTERFACTUAL_VIEWS = ("zero_ref_hidden_kept", "shortened_reference")
 PARITY_TOLERANCE = 1e-6
 ROUND_TRIP_TOLERANCE = 1e-6
 
@@ -201,13 +201,6 @@ def make_named_view(batch: Mapping[str, Any], name: str, *, k: int | None = None
             "ref_valid_mask": torch.zeros_like(mask), "slow_hidden": hidden,
             "shortened_k": 0,
         }
-    if name == "zero_ref_hidden_null":
-        return {
-            **invariant_view_fields(batch),
-            "name": name, "ref_action": torch.zeros_like(ref),
-            "ref_valid_mask": torch.zeros_like(mask), "slow_hidden": torch.zeros_like(hidden),
-            "shortened_k": 0,
-        }
     if name != "shortened_reference":
         raise ValueError(f"Unknown view {name!r}")
     if count <= 0:
@@ -231,19 +224,12 @@ def make_named_view(batch: Mapping[str, Any], name: str, *, k: int | None = None
 
 def choose_counterfactual_view(
     batch: Mapping[str, Any], args: argparse.Namespace, rng: random.Random,
-) -> dict[str, Any]:
+) -> dict[str, Any] | None:
     count = int(batch["ref_valid_count"].item())
     if count == 0:
-        # Persisted is already zero_ref_hidden_kept; nulling hidden is the only
-        # non-duplicate applicable counterfactual among the required views.
-        return make_named_view(batch, "zero_ref_hidden_null")
-    draw = rng.random()
-    kept_cut = args.zero_ref_kept_probability
-    null_cut = kept_cut + args.zero_ref_null_probability
-    if draw < kept_cut:
+        return None
+    if rng.random() < args.zero_ref_kept_probability:
         return make_named_view(batch, "zero_ref_hidden_kept")
-    if draw < null_cut:
-        return make_named_view(batch, "zero_ref_hidden_null")
     return make_named_view(batch, "shortened_reference", k=rng.randrange(count))
 
 
@@ -256,6 +242,8 @@ def assert_view_contracts(
     checks = {
         "persisted_mask_matches_count": torch.equal(base["ref_valid_mask"], expected_mask),
         "persisted_invalid_exact_zero": torch.count_nonzero(base["ref_action"][:, count:]).item() == 0,
+        "persisted_hidden_exact": torch.equal(base["slow_hidden"], batch["slow_hidden"]),
+        "counterfactual_hidden_exact": torch.equal(counter["slow_hidden"], batch["slow_hidden"]),
         "observations_unchanged": all(
             torch.equal(base[key], batch[key]) and torch.equal(counter[key], batch[key])
             for key in ("current_rgb", "previous_rgb", "depth_image", "gripper_image", "depth_gripper")
@@ -272,11 +260,6 @@ def assert_view_contracts(
         })
     if counter["name"] == "zero_ref_hidden_kept":
         checks["hidden_kept_exact"] = torch.equal(counter["slow_hidden"], batch["slow_hidden"])
-    if counter["name"] == "zero_ref_hidden_null":
-        checks.update({
-            "hidden_null_exact_zero": torch.count_nonzero(counter["slow_hidden"]).item() == 0,
-            "hidden_null_shape_equal": tuple(counter["slow_hidden"].shape) == tuple(batch["slow_hidden"].shape),
-        })
     if counter["name"] == "shortened_reference":
         k = int(counter["shortened_k"])
         checks.update({
@@ -333,14 +316,35 @@ def loss_details(
     )
 
 
+def weighted_supervised_loss(
+    persisted_loss: torch.Tensor,
+    counterfactual_loss: torch.Tensor | None,
+    persisted_weight: float,
+    counterfactual_weight: float,
+) -> tuple[torch.Tensor, float]:
+    if counterfactual_loss is None:
+        return persisted_loss, 1.0
+    denominator = float(persisted_weight + counterfactual_weight)
+    if denominator <= 0:
+        raise ValueError("persisted_loss_weight + counterfactual_loss_weight must be positive")
+    supervised = (
+        persisted_weight * persisted_loss + counterfactual_weight * counterfactual_loss
+    ) / denominator
+    return supervised, denominator
+
+
 def paired_loss(
     policy: torch.nn.Module,
     batch: Mapping[str, Any],
-    counter: Mapping[str, Any],
+    counter: Mapping[str, Any] | None,
     args: argparse.Namespace,
-) -> tuple[torch.Tensor, Mapping[str, torch.Tensor], Mapping[str, torch.Tensor], dict[str, Any]]:
+) -> tuple[torch.Tensor, Mapping[str, torch.Tensor], Mapping[str, torch.Tensor] | None, dict[str, Any]]:
     base = persisted_view(batch)
-    contracts = assert_view_contracts(batch, base, counter)
+    count = int(batch["ref_valid_count"].item())
+    if counter is None and count != 0:
+        raise AssertionError("C>0 samples require one selectable counterfactual view")
+    if counter is not None and count == 0:
+        raise AssertionError("C==0 samples must use the single persisted-only loss path")
     noise = torch.randn_like(batch["raw_action"], dtype=torch.float32)
     timesteps = torch.randint(
         0, policy.noise_scheduler.config.num_train_timesteps,
@@ -350,33 +354,69 @@ def paired_loss(
         torch.rand((batch["raw_action"].shape[0], 1), device=batch["raw_action"].device)
         > policy.cond_drop_chance
     ).float()
-    pair_rng = snapshot_rng()
-    persisted = loss_details(policy, batch, base, noise=noise, timesteps=timesteps, cond_mask=cond_mask)
-    after_first = snapshot_rng()
-    restore_rng(pair_rng)
-    counterfactual = loss_details(policy, batch, counter, noise=noise, timesteps=timesteps, cond_mask=cond_mask)
-    restore_rng(after_first)
-    total = (
-        args.persisted_loss_weight * persisted["loss"]
-        + args.counterfactual_loss_weight * counterfactual["loss"]
-    )
-    consistency = F.mse_loss(persisted["prediction"], counterfactual["prediction"])
-    total = total + args.consistency_weight * consistency
-    pair_audit = {
-        **contracts,
-        "noise_exact_equal": torch.equal(persisted["noise"], counterfactual["noise"]),
-        "timestep_exact_equal": torch.equal(persisted["timesteps"], counterfactual["timesteps"]),
-        "cfg_mask_exact_equal": torch.equal(persisted["cond_mask"], counterfactual["cond_mask"]),
-        "noise_sha256": tensor_sha256(noise),
-        "timestep": int(timesteps.item()),
-        "cfg_mask": float(cond_mask.item()),
-        "counterfactual_view": counter["name"],
-        "shortened_k": counter["shortened_k"],
+
+    if counter is None:
+        persisted = loss_details(policy, batch, base, noise=noise, timesteps=timesteps, cond_mask=cond_mask)
+        counterfactual = None
+        supervised, denominator = weighted_supervised_loss(
+            persisted["loss"], None,
+            args.persisted_loss_weight, args.counterfactual_loss_weight,
+        )
+        consistency = torch.zeros((), device=supervised.device, dtype=supervised.dtype)
+        pair_audit = {
+            "has_counterfactual": False,
+            "paired_rng_not_applicable": True,
+            "persisted_ref_exact_zero": torch.count_nonzero(base["ref_action"]).item() == 0,
+            "persisted_mask_all_zero": torch.count_nonzero(base["ref_valid_mask"]).item() == 0,
+            "persisted_hidden_exact": torch.equal(base["slow_hidden"], batch["slow_hidden"]),
+            "noise_sha256": tensor_sha256(noise),
+            "timestep": int(timesteps.item()),
+            "cfg_mask": float(cond_mask.item()),
+            "counterfactual_view": None,
+            "shortened_k": None,
+        }
+        if not all(pair_audit[key] for key in (
+            "persisted_ref_exact_zero", "persisted_mask_all_zero", "persisted_hidden_exact",
+        )):
+            raise AssertionError("Single persisted expired-reference contract failed")
+    else:
+        contracts = assert_view_contracts(batch, base, counter)
+        pair_rng = snapshot_rng()
+        persisted = loss_details(policy, batch, base, noise=noise, timesteps=timesteps, cond_mask=cond_mask)
+        after_first = snapshot_rng()
+        restore_rng(pair_rng)
+        counterfactual = loss_details(policy, batch, counter, noise=noise, timesteps=timesteps, cond_mask=cond_mask)
+        restore_rng(after_first)
+        supervised, denominator = weighted_supervised_loss(
+            persisted["loss"], counterfactual["loss"],
+            args.persisted_loss_weight, args.counterfactual_loss_weight,
+        )
+        consistency = F.mse_loss(persisted["prediction"], counterfactual["prediction"])
+        pair_audit = {
+            **contracts,
+            "has_counterfactual": True,
+            "paired_rng_not_applicable": False,
+            "noise_exact_equal": torch.equal(persisted["noise"], counterfactual["noise"]),
+            "timestep_exact_equal": torch.equal(persisted["timesteps"], counterfactual["timesteps"]),
+            "cfg_mask_exact_equal": torch.equal(persisted["cond_mask"], counterfactual["cond_mask"]),
+            "noise_sha256": tensor_sha256(noise),
+            "timestep": int(timesteps.item()),
+            "cfg_mask": float(cond_mask.item()),
+            "counterfactual_view": counter["name"],
+            "shortened_k": counter["shortened_k"],
+        }
+        for key in ("noise_exact_equal", "timestep_exact_equal", "cfg_mask_exact_equal"):
+            if not pair_audit[key]:
+                raise AssertionError(f"Paired diffusion invariant failed: {key}")
+
+    total = supervised + args.consistency_weight * consistency
+    pair_audit.update({
+        "supervised_loss": float(supervised.detach().float().cpu()),
+        "persisted_loss": float(persisted["loss"].detach().float().cpu()),
+        "counterfactual_loss": None if counterfactual is None else float(counterfactual["loss"].detach().float().cpu()),
+        "supervised_weight_denominator": denominator,
         "consistency_loss": float(consistency.detach().float().cpu()),
-    }
-    for key in ("noise_exact_equal", "timestep_exact_equal", "cfg_mask_exact_equal"):
-        if not pair_audit[key]:
-            raise AssertionError(f"Paired diffusion invariant failed: {key}")
+    })
     return total, persisted, counterfactual, pair_audit
 
 
@@ -501,10 +541,35 @@ def preflight_all_views(dataset: M2aDataset) -> dict[str, Any]:
             torch.utils.data.Subset(dataset, [index]), batch_size=1, num_workers=0,
         )))
         base = persisted_view(batch)
-        names_and_k = [("zero_ref_hidden_kept", None), ("zero_ref_hidden_null", None)]
         count = int(batch["ref_valid_count"].item())
-        if count > 0:
-            names_and_k.extend((("shortened_reference", 0), ("shortened_reference", count - 1)))
+        if count == 0:
+            planned = choose_counterfactual_view(
+                batch,
+                argparse.Namespace(zero_ref_kept_probability=0.8),
+                random.Random(0),
+            )
+            checks = {
+                "persisted_ref_exact_zero": torch.count_nonzero(base["ref_action"]).item() == 0,
+                "persisted_mask_all_zero": torch.count_nonzero(base["ref_valid_mask"]).item() == 0,
+                "persisted_hidden_exact": torch.equal(base["slow_hidden"], batch["slow_hidden"]),
+                "no_counterfactual_generated": planned is None,
+                "only_one_forward_planned": planned is None,
+            }
+            failed = sorted(key for key, passed in checks.items() if not passed)
+            if failed:
+                raise AssertionError(f"Expired-reference training-plan contract failed: {failed}")
+            records.append({
+                "sample_id": str(batch["sample_id"][0]), "age": age,
+                "persisted_ref_valid_count": count, "view": None,
+                "has_counterfactual": False, "planned_forward_count": 1,
+                "shortened_k": None, "checks": checks,
+            })
+            continue
+        names_and_k = [
+            ("zero_ref_hidden_kept", None),
+            ("shortened_reference", 0),
+            ("shortened_reference", count - 1),
+        ]
         for name, k in names_and_k:
             view = make_named_view(batch, name, k=k)
             checks = assert_view_contracts(batch, base, view)
@@ -518,7 +583,30 @@ def preflight_all_views(dataset: M2aDataset) -> dict[str, Any]:
         "shortened_boundaries_checked": ["k=0", "k=C-1"],
         "artificial_zero_ref_ages_0_7_checked": True,
         "expired_ages_8_11_checked": True,
+        "all_selectable_views_keep_slow_hidden_exact": True,
+        "no_training_view_may_zero_slow_hidden": True,
+        "C_eq_0_single_persisted_forward_checked": True,
     }
+
+
+def loss_scale_preflight() -> dict[str, Any]:
+    persisted = torch.tensor(2.0)
+    counterfactual = torch.tensor(4.0)
+    equal, equal_denominator = weighted_supervised_loss(persisted, counterfactual, 1.0, 1.0)
+    unequal, unequal_denominator = weighted_supervised_loss(persisted, counterfactual, 1.0, 3.0)
+    single, single_denominator = weighted_supervised_loss(persisted, None, 1.0, 1.0)
+    checks = {
+        "equal_weights_is_mean_not_sum": bool(torch.equal(equal, torch.tensor(3.0))),
+        "unequal_weights_is_weighted_mean": bool(torch.equal(unequal, torch.tensor(3.5))),
+        "single_persisted_scale_unchanged": bool(torch.equal(single, persisted)),
+        "equal_denominator": equal_denominator == 2.0,
+        "unequal_denominator": unequal_denominator == 4.0,
+        "single_denominator": single_denominator == 1.0,
+    }
+    failed = sorted(key for key, passed in checks.items() if not passed)
+    if failed:
+        raise AssertionError(f"Loss-scale preflight failed: {failed}")
+    return {"passed": True, "checks": checks}
 
 
 def gradient_preflight(
@@ -526,9 +614,10 @@ def gradient_preflight(
     batch: Mapping[str, Any],
     args: argparse.Namespace,
 ) -> dict[str, Any]:
-    rng = random.Random(args.seed + 991)
     count = int(batch["ref_valid_count"].item())
-    counter_name = "zero_ref_hidden_null" if count == 0 else "zero_ref_hidden_kept"
+    if count <= 0:
+        raise AssertionError("Gradient preflight requires a C>0 sample to exercise the paired adapter gradient")
+    counter_name = "zero_ref_hidden_kept"
     counter = make_named_view(batch, counter_name)
     set_train_mode(policy)
     policy.zero_grad(set_to_none=True)
@@ -540,6 +629,8 @@ def gradient_preflight(
     result = {
         "persisted_loss": float(persisted["loss"].detach().float().cpu()),
         "counterfactual_loss": float(counterfactual["loss"].detach().float().cpu()),
+        "supervised_loss": pair_audit["supervised_loss"],
+        "supervised_weight_denominator": pair_audit["supervised_weight_denominator"],
         "total_loss": float(total.detach().float().cpu()),
         "all_losses_finite": all(torch.isfinite(value).item() for value in (persisted["loss"], counterfactual["loss"], total)),
         "gradient_tensor_count": len(gradients),
@@ -550,7 +641,6 @@ def gradient_preflight(
         "vision_encoder_training": bool(policy.vision_encoder.training),
         "paired_contract": pair_audit,
         "counterfactual_view": counter_name,
-        "unused_rng_guard": rng.random(),
     }
     policy.zero_grad(set_to_none=True)
     failures = [
@@ -640,7 +730,7 @@ def validate(
                 append_jsonl(per_sample_path, row)
     modes = {mode: grouped_metrics(rows) for mode, rows in rows_by_mode.items()}
     gaps = {}
-    for mode in ("zero_ref_hidden_kept", "zero_ref_hidden_null"):
+    for mode in ("zero_ref_hidden_kept",):
         gaps[mode] = {}
         for group in modes["persisted"]:
             persisted = modes["persisted"][group]
@@ -774,9 +864,10 @@ def save_checkpoint(
         "ref_validity_adapter_config": architecture["adapter"],
         "counterfactual_policy": {
             "zero_ref_kept_probability": args.zero_ref_kept_probability,
-            "zero_ref_null_probability": args.zero_ref_null_probability,
             "shortened_ref_probability": args.shortened_ref_probability,
-            "expired_persisted_rule": "always_zero_ref_hidden_null",
+            "C_eq_0_rule": "single_persisted_only_no_counterfactual",
+            "slow_hidden_policy": "original_persisted_hidden_in_all_views",
+            "supervised_loss": "weighted_mean_for_C_gt_0; persisted_loss_for_C_eq_0",
             "paired_same_noise_timestep_cfg_and_torch_rng": True,
         },
         "validation_metrics": dict(validation_metrics),
@@ -832,10 +923,9 @@ def dry_run_audit(args: argparse.Namespace) -> dict[str, Any]:
             age_zero_candidates += 1
         view_counts["persisted"] += 1
         if count == 0:
-            view_counts["zero_ref_hidden_null"] += 1
+            view_counts["single_persisted_only_no_counterfactual"] += 1
         else:
             view_counts["counterfactual_eligible_zero_ref_hidden_kept"] += 1
-            view_counts["counterfactual_eligible_zero_ref_hidden_null"] += 1
             view_counts["counterfactual_eligible_shortened_reference"] += 1
     if failures:
         raise AssertionError(f"Dataset dry-run contracts failed: {failures[:10]}")
@@ -849,10 +939,11 @@ def dry_run_audit(args: argparse.Namespace) -> dict[str, Any]:
         "age_0_7_counterfactual_zero_ref_candidates": age_zero_candidates,
         "probabilities": {
             "zero_ref_hidden_kept": args.zero_ref_kept_probability,
-            "zero_ref_hidden_null": args.zero_ref_null_probability,
             "shortened_reference": args.shortened_ref_probability,
         },
-        "expired_persisted_rule": "always_zero_ref_hidden_null",
+        "selectable_counterfactual_views": list(SELECTABLE_COUNTERFACTUAL_VIEWS),
+        "slow_hidden_policy": "original_persisted_hidden_in_all_views",
+        "expired_persisted_rule": "single_persisted_only_no_counterfactual",
         "all_contracts_passed": True,
     }
 
@@ -887,11 +978,13 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("grad_accumulation_steps and max_optimizer_steps must be positive")
     if not 0 <= args.validation_timestep < 100:
         raise ValueError("validation_timestep must be in [0,99]")
-    probabilities = [args.zero_ref_kept_probability, args.zero_ref_null_probability, args.shortened_ref_probability]
+    probabilities = [args.zero_ref_kept_probability, args.shortened_ref_probability]
     if any(value < 0 for value in probabilities) or not math.isclose(sum(probabilities), 1.0, abs_tol=1e-9):
         raise ValueError(f"Counterfactual probabilities must be nonnegative and sum to 1, got {probabilities}")
     if min(args.persisted_loss_weight, args.counterfactual_loss_weight, args.consistency_weight) < 0:
         raise ValueError("Loss weights must be nonnegative")
+    if args.persisted_loss_weight + args.counterfactual_loss_weight <= 0:
+        raise ValueError("persisted_loss_weight + counterfactual_loss_weight must be positive")
     if args.validate_every <= 0 or args.save_every <= 0 or args.late_age_sample_weight <= 0:
         raise ValueError("validate_every, save_every, and late_age_sample_weight must be positive")
 
@@ -927,6 +1020,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     first_batch = move_batch(first_cpu, device)
     view_audit = preflight_all_views(datasets["train"])
     grad_audit = gradient_preflight(policy, first_batch, args)
+    loss_scale_audit = loss_scale_preflight()
     state_names = sorted(policy.state_dict())
     architecture_sanity = {
         "use_ref_validity": policy.use_ref_validity,
@@ -949,6 +1043,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "m1_init_parity": parity,
         "counterfactual_view_preflight": view_audit,
         "gradient_preflight": grad_audit,
+        "loss_scale_preflight": loss_scale_audit,
         "architecture_sanity": architecture_sanity,
         "checkpoint_architecture_round_trip": architecture_round_trip,
         "parameters": {
@@ -984,10 +1079,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "counterfactual_policy": {
             "probabilities_for_C_gt_0": {
                 "zero_ref_hidden_kept": args.zero_ref_kept_probability,
-                "zero_ref_hidden_null": args.zero_ref_null_probability,
                 "shortened_reference": args.shortened_ref_probability,
             },
-            "C_eq_0_rule": "always zero_ref_hidden_null; never duplicate persisted zero_ref_hidden_kept",
+            "C_eq_0_rule": "single persisted forward; no counterfactual",
+            "slow_hidden_policy": "original persisted slow_hidden in every formal view",
+            "supervised_loss": "weighted mean for C>0; persisted loss for C==0",
         },
     }
     write_json(output_dir / "config.json", config)
@@ -1019,6 +1115,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     train_iterator = iter(loaders["train"])
     counter_rng = random.Random(args.seed + 20260820)
     view_counter: Counter[str] = Counter()
+    window_sums: Counter[str] = Counter()
+    window_counterfactual_loss_sum = 0.0
+    window_counterfactual_loss_count = 0
+    window_paired_count = 0
+    window_single_count = 0
+    window_view_counts: Counter[str] = Counter()
     while global_step < args.max_optimizer_steps:
         try:
             cpu_batch = next(train_iterator)
@@ -1036,13 +1138,31 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             raise FloatingPointError(f"Non-finite M2a loss at micro_step={micro_step}")
         scaled.backward()
         micro_step += 1
-        view_counter[counter["name"]] += 1
+        counter_name = None if counter is None else counter["name"]
+        if counter_name is None:
+            view_counter["single_persisted"] += 1
+            window_single_count += 1
+        else:
+            view_counter[counter_name] += 1
+            window_view_counts[counter_name] += 1
+            window_paired_count += 1
+        persisted_value = float(persisted["loss"].detach().float().cpu())
+        counterfactual_value = (
+            None if counterfactual is None
+            else float(counterfactual["loss"].detach().float().cpu())
+        )
+        total_value = float(total.detach().float().cpu())
+        window_sums["total_loss"] += total_value
+        window_sums["persisted_loss"] += persisted_value
+        window_sums["supervised_loss"] += pair_audit["supervised_loss"]
+        window_sums["consistency_loss"] += pair_audit["consistency_loss"]
+        if counterfactual_value is not None:
+            window_counterfactual_loss_sum += counterfactual_value
+            window_counterfactual_loss_count += 1
         pair_audit.update({
             "sample_id": str(cpu_batch["sample_id"][0]),
             "age": int(cpu_batch["age"].item()),
             "micro_step": micro_step,
-            "persisted_loss": float(persisted["loss"].detach().float().cpu()),
-            "counterfactual_loss": float(counterfactual["loss"].detach().float().cpu()),
         })
         append_jsonl(view_audit_path, pair_audit)
         if micro_step % args.grad_accumulation_steps:
@@ -1056,21 +1176,41 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         optimizer.zero_grad(set_to_none=True)
         global_step += 1
         ema.update(policy)
+        window_count = window_paired_count + window_single_count
+        if window_count != args.grad_accumulation_steps:
+            raise AssertionError(
+                f"Optimizer-step micro-sample accounting mismatch: {window_count} "
+                f"!= {args.grad_accumulation_steps}"
+            )
         record = {
             "type": "train", "model_variant": MODEL_VARIANT,
             "global_optimizer_step": global_step, "micro_step": micro_step,
             "logical_epoch": epoch,
-            "loss": float(total.detach().float().cpu()),
-            "persisted_loss": float(persisted["loss"].detach().float().cpu()),
-            "counterfactual_loss": float(counterfactual["loss"].detach().float().cpu()),
+            "loss": window_sums["total_loss"] / window_count,
+            "total_loss": window_sums["total_loss"] / window_count,
+            "persisted_loss": window_sums["persisted_loss"] / window_count,
+            "counterfactual_loss": (
+                None if window_counterfactual_loss_count == 0
+                else window_counterfactual_loss_sum / window_counterfactual_loss_count
+            ),
+            "supervised_loss": window_sums["supervised_loss"] / window_count,
+            "consistency_loss": window_sums["consistency_loss"] / window_count,
             "consistency_weight": args.consistency_weight,
-            "counterfactual_view": counter["name"],
+            "paired_micro_samples": window_paired_count,
+            "single_persisted_micro_samples": window_single_count,
+            "counterfactual_view_counts": dict(window_view_counts),
             "gradient_norm": float(torch.as_tensor(grad_norm).float().cpu()),
             "learning_rate": float(optimizer.param_groups[0]["lr"]),
             "view_counts_so_far": dict(view_counter),
         }
         append_jsonl(metrics_path, record)
         print(json.dumps(record, sort_keys=True), flush=True)
+        window_sums.clear()
+        window_counterfactual_loss_sum = 0.0
+        window_counterfactual_loss_count = 0
+        window_paired_count = 0
+        window_single_count = 0
+        window_view_counts.clear()
         if global_step % args.validate_every == 0:
             per_sample = output_dir / f"validation_per_sample_step_{global_step:06d}.jsonl"
             latest_validation = validate(
@@ -1117,9 +1257,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--validation_seed", type=int, default=20260810)
     parser.add_argument("--persisted_loss_weight", type=float, default=1.0)
     parser.add_argument("--counterfactual_loss_weight", type=float, default=1.0)
-    parser.add_argument("--zero_ref_kept_probability", type=float, default=0.60)
-    parser.add_argument("--zero_ref_null_probability", type=float, default=0.25)
-    parser.add_argument("--shortened_ref_probability", type=float, default=0.15)
+    parser.add_argument("--zero_ref_kept_probability", type=float, default=0.80)
+    parser.add_argument("--shortened_ref_probability", type=float, default=0.20)
     parser.add_argument("--late_age_sample_weight", type=float, default=2.0)
     parser.add_argument("--consistency_weight", type=float, default=0.0)
     parser.add_argument("--num_workers", type=int, default=4)

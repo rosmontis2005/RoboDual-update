@@ -12,7 +12,7 @@ This is an expert-state-manifold experiment. It does **not** establish arbitrary
 
 M1 couples condition with trajectory age: ages 0–7 have `8-age` valid reference actions, while ages 8–11 have an exact-zero reference. Late-age oversampling changes frequency but not that correlation.
 
-M2a retains one persisted view and adds one same-state counterfactual view per micro sample. Observation, previous observation, depth, gripper inputs, proprio, instruction, history, slow age, and expert target remain identical. Only slow reference validity/action and, for one view, slow hidden values change. No new trajectories or generalist calls are needed; the immutable `robodual_age_extended_expert_v1` dataset already contains every required expert observation, target, old `slow_hidden`, `slow_action`, age, mask provenance, and split.
+For samples with a valid persisted reference, M2a retains one persisted view and adds one same-state counterfactual view. Observation, previous observation, depth, gripper inputs, proprio, instruction/task context through the original `slow_hidden`, history, slow age, and expert target remain identical. The only intervention is slow-action reference availability plus its explicit validity mask. No new trajectories or generalist calls are needed; the immutable `robodual_age_extended_expert_v1` dataset already contains every required expert observation, target, old `slow_hidden`, `slow_action`, age, mask provenance, and split.
 
 ## Architecture
 
@@ -33,24 +33,31 @@ For persisted count `C`:
 
 1. `persisted`: original reference, persisted mask, original hidden.
 2. `zero_ref_hidden_kept`: exact-zero reference, all-zero mask, original hidden.
-3. `zero_ref_hidden_null`: exact-zero reference, all-zero mask, `zeros_like(original_hidden)`; token length and shape are unchanged. This is hidden shortcut prevention, not a claim about the only deployment state.
-4. `shortened_reference`: only when `C>0`; sample `k` uniformly from `[0,C-1]`, retain the first `k` currently valid actions, and zero the suffix/mask. It never adds future reference.
+3. `shortened_reference`: only when `C>0`; sample `k` uniformly from `[0,C-1]`, retain the first `k` currently valid actions, and zero the suffix/mask. It never adds future reference.
 
-Default probabilities for `C>0` are 0.60 kept-zero, 0.25 null-zero, and 0.15 shortened. For `C=0`, persisted is already identical to kept-zero, so the paired view is always `zero_ref_hidden_null`; an identical second forward is never performed.
+For `C>0`, the default counterfactual probabilities are 0.80 kept-zero and 0.20 shortened; they must be nonnegative and sum to one. For `C=0`, persisted is already the real deployment zero-reference condition, so training performs only the persisted forward: it generates no counterfactual and does not snapshot/restore paired RNG state.
+
+M2a-v1 intentionally keeps `slow_hidden` exact-equal to the persisted source in every formal view. In the current DiT, `lang` is not the operative task-conditioning path; `slow_hidden` passes through `context_adapter` into both global conditioning and cross-attention context. Zeroing it would remove task semantics along with a stale hint, so hidden nulling/dropout/masking/replacement/randomization is outside this experiment.
 
 The view layer never edits persisted dataset files. `slow_age` remains available for sampling, audits, and validation groups, but is not embedded.
 
 ## Paired diffusion contract and objective
 
-Each micro sample performs persisted and counterfactual forwards with the exact same sampled diffusion noise, timestep, and CFG mask. Because DiT attention contains training dropout, Torch CPU/all-CUDA RNG state is also restored before the second forward and then advanced exactly once. M1's `cond_drop_chance=0.1` remains CFG training and is distinct from counterfactual reference removal.
+Each `C>0` micro sample performs persisted and counterfactual forwards with the exact same sampled diffusion noise, timestep, and CFG mask. Because DiT attention contains training dropout, Torch CPU/all-CUDA RNG state is also restored before the second forward and then advanced exactly once. A `C=0` sample performs one persisted forward, so paired RNG equality is not applicable. M1's `cond_drop_chance=0.1` remains CFG training and is distinct from counterfactual reference removal.
 
 The default objective is:
 
 ```text
-L = 1.0 * L_persisted + 1.0 * L_counterfactual
+C > 0:
+L_supervised = (w_p * L_persisted + w_c * L_counterfactual) / (w_p + w_c)
+
+C == 0:
+L_supervised = L_persisted
+
+L_total = L_supervised + consistency_weight * L_consistency
 ```
 
-Both use the unchanged M1 epsilon diffusion target for the same expert action chunk. Optional predicted-noise consistency is available through `--consistency_weight`, default `0.0`.
+The paired denominator must be positive; defaults are `w_p=w_c=1.0`, making the paired supervised loss a mean rather than a sum. Both views use the unchanged M1 epsilon diffusion target for the same expert action chunk. Optional predicted-noise consistency is available through `--consistency_weight`, default `0.0`.
 
 Physical dataset batch size is fixed to 1 because hidden token lengths vary and there is no context padding mask. Gradient accumulation remains 8 by default. Late-age sampling weight defaults to 2.0, matching M1's broad policy, but is not the M2a method.
 
@@ -65,10 +72,12 @@ Physical dataset batch size is fixed to 1 because hidden token lengths vary and 
 - prediction, diffusion loss, reconstructed first action, EE6, and gripper parity at tolerance `1e-6`;
 - persisted mask/count and invalid-zero checks;
 - zero-reference exact-zero mask/action checks;
-- kept-hidden equality and null-hidden zero/shape checks;
+- exact original-hidden equality for every selectable formal view and an assertion that no training view may zero `slow_hidden`;
 - shortened-prefix, `k<C`, suffix-zero, and no-future-reference checks;
+- `C=0` exact-zero persisted reference/mask, no counterfactual, and one planned forward;
 - observation, proprio, and expert-target invariance;
-- exact paired noise/timestep/CFG equality;
+- `C>0` paired-view existence and exact paired noise/timestep/CFG/training-RNG equality;
+- loss-scale checks that `(2+4)/2=3`, weighted `(2+3*4)/4=3.5`, and a single persisted loss remains unchanged;
 - real forward/backward finite-loss and finite-gradient checks;
 - nonzero validity-adapter gradient under different masks;
 - unchanged frozen/eval vision encoder state;
@@ -78,15 +87,14 @@ It writes `preflight.json` and one `sample_view_audit.jsonl` record to a new out
 
 ## Validation protocol and success criteria
 
-Before training, the EMA initialized from M1 is evaluated on the unchanged full validation split and saved as `baseline_validation.json`. Every later validation uses the same sample population, SHA-derived per-sample noise, `--validation_timestep`, CFG mask 1, and three condition modes:
+Before training, the EMA initialized from M1 is evaluated on the unchanged full validation split and saved as `baseline_validation.json`. Every later validation uses the same sample population, SHA-derived per-sample noise, `--validation_timestep`, CFG mask 1, and two condition modes:
 
 - `persisted`;
-- `zero_ref_hidden_kept`;
-- `zero_ref_hidden_null`.
+- `zero_ref_hidden_kept`.
 
 Results are grouped by ages 0–7, each of 8/9/10/11, ages 8–11, and all. Each group reports diffusion noise MSE, first-action EE6 RMSE, and first-action gripper-sign accuracy. `reference_gap` is target-error/accuracy in a zero-reference mode minus persisted performance; raw prediction difference is not treated as performance. Per-sample records preserve the fixed noise hash, timestep, target, and reconstructed first action.
 
-Primary offline success requires lower `zero_ref_hidden_kept` expert-target error than step-0/M1, especially for artificial age-0–7 zero-reference views and real expired ages 8–11, without material persisted degradation. Improvement for `zero_ref_hidden_null` is secondary. Closed-loop or off-manifold claims require a later evaluator.
+Primary offline success requires lower `zero_ref_hidden_kept` expert-target error than step-0/M1, especially for artificial age-0–7 zero-reference views and real expired ages 8–11, without material persisted degradation. Hidden-null performance is not an M2a-v1 criterion. Closed-loop or off-manifold claims require a later evaluator.
 
 ## Outputs and checkpoint contract
 
@@ -156,8 +164,8 @@ CUDA_VISIBLE_DEVICES=0 /home/rosmontis/miniconda3/envs/dualsys_env/bin/python \
   --validate_every 250 --save_every 100 \
   --validation_timestep 50 --validation_seed 20260810 \
   --persisted_loss_weight 1.0 --counterfactual_loss_weight 1.0 \
-  --zero_ref_kept_probability 0.60 --zero_ref_null_probability 0.25 \
-  --shortened_ref_probability 0.15 --late_age_sample_weight 2.0 \
+  --zero_ref_kept_probability 0.80 --shortened_ref_probability 0.20 \
+  --late_age_sample_weight 2.0 \
   --consistency_weight 0.0 \
   --data_dir DiT_train/data_collection/runs/ageext_expert_600_s42 \
   --processor_path /home/rosmontis/Projects/dualsys/models/generalist \
