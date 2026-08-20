@@ -224,6 +224,7 @@ class DiT_SingleTokenAction(nn.Module):
         with_gripper=False,
         with_tactile=False,
         with_hist_action_num=4,
+        use_ref_validity=False,
     ):
         super().__init__()
         self.in_channels = in_channels
@@ -238,11 +239,17 @@ class DiT_SingleTokenAction(nn.Module):
         self.with_gripper = with_gripper
         self.with_tactile = with_tactile
         self.with_hist_action_num = with_hist_action_num
+        self.use_ref_validity = bool(use_ref_validity)
         # Optional residual adapter installed by transition LoRA training. It
         # stays None for every existing checkpoint and evaluation path.
         self.history_adapter = None
 
         self.x_embedder = nn.Linear(7 * 2, hidden_size, bias=True)
+        if self.use_ref_validity:
+            # M2a-only token adapter. Keeping this separate preserves the
+            # legacy x_embedder shape and zero init gives exact M1 step-0
+            # parity when an M1 checkpoint is loaded.
+            self.ref_valid_embedder = nn.Linear(1, hidden_size, bias=False)
 
         if self.with_hist_action_num > 0:
             self.hist_act_embed = nn.Linear(7, hidden_size, bias=True)
@@ -298,6 +305,8 @@ class DiT_SingleTokenAction(nn.Module):
 
         self.final_layer = FinalLayer(hidden_size, patch_size, self.out_channels)
         self.initialize_weights()
+        if self.use_ref_validity:
+            nn.init.zeros_(self.ref_valid_embedder.weight)
 
 
 
@@ -351,6 +360,7 @@ class DiT_SingleTokenAction(nn.Module):
                 proprio=None, 
                 hist_action=None,
                 cond_mask=None,
+                ref_valid_mask=None,
                 use_fp16=False):
         """
         Forward pass of DiT.
@@ -370,7 +380,17 @@ class DiT_SingleTokenAction(nn.Module):
         x = torch.cat([cond, x], dim=-1) # ( b, T, d_action * 2 )
         batches, f, d_action = x.shape
 
-        x = self.x_embedder(x.float()) 
+        x = self.x_embedder(x.float())
+        if self.use_ref_validity:
+            if ref_valid_mask is None:
+                raise ValueError("ref_valid_mask is required when use_ref_validity=True")
+            if tuple(ref_valid_mask.shape) != (batches, f):
+                raise ValueError(
+                    f"ref_valid_mask must have shape {(batches, f)}, "
+                    f"got {tuple(ref_valid_mask.shape)}"
+                )
+            validity = ref_valid_mask.to(device=x.device, dtype=x.dtype).unsqueeze(-1)
+            x = x + self.ref_valid_embedder(validity)
         t = self.t_embedder(timesteps, use_fp16=use_fp16)      
 
 

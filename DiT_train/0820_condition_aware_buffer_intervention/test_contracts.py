@@ -80,6 +80,26 @@ class BufferIsolationTests(unittest.TestCase):
 
 
 class FactorialSummaryTests(unittest.TestCase):
+    def test_first_step_tolerances_remain_strict(self):
+        self.assertEqual(M.RAW_EQUALITY_ATOL, 1e-6)
+        self.assertEqual(M.RAW_EQUALITY_RTOL, 1e-6)
+        self.assertEqual(M.FLUSH_AGGREGATION_ATOL, 1e-6)
+
+    def test_canonical_first_observation_roundtrip_hash(self):
+        robot = np.arange(15, dtype=np.float32)
+        branchpoint = {
+            "robot_obs": robot,
+            "selected_proprio": np.concatenate((robot[:6], robot[-1:])),
+            "scene_obs": np.arange(6, dtype=np.float32),
+            "rgb_static": np.arange(12, dtype=np.uint8).reshape(2, 2, 3),
+            "rgb_gripper": np.arange(12, dtype=np.uint8).reshape(2, 2, 3),
+            "depth_static": np.arange(4, dtype=np.float32).reshape(2, 2),
+            "depth_gripper": np.arange(4, dtype=np.float32).reshape(2, 2),
+        }
+        policy_obs = M.T.dataset_observation(branchpoint)
+        recaptured = M.T.capture_env_state(policy_obs)
+        self.assertEqual(M.value_digest(branchpoint), M.value_digest(recaptured))
+
     def test_required_matched_control_contrasts_exist(self):
         rows = []
         for branch_i, branch in enumerate(M.BRANCHES):

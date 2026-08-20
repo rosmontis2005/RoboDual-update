@@ -8,6 +8,7 @@ import copy
 import hashlib
 import importlib.util
 import json
+import os
 import platform
 import random
 import sys
@@ -17,6 +18,9 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 import numpy as np
+
+# Must be set before CUDA/cuBLAS is initialized. This is local to this process.
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 
 
 SCRIPT_PATH = Path(__file__).resolve()
@@ -104,6 +108,40 @@ def prepare_run_dir(run_name: str) -> Path:
 
 def clone_runtime(value: Any) -> Any:
     return B.clone_runtime(value)
+
+
+def configure_torch_determinism() -> dict[str, Any]:
+    import torch
+
+    torch.use_deterministic_algorithms(True, warn_only=False)
+    if hasattr(torch.backends, "cudnn"):
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+    return {
+        "torch_deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+        "deterministic_warn_only": torch.is_deterministic_algorithms_warn_only_enabled(),
+        "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+        "cudnn_benchmark": bool(torch.backends.cudnn.benchmark),
+        "cudnn_deterministic": bool(torch.backends.cudnn.deterministic),
+        "profile_list_digits": 9,
+    }
+
+
+def diagnostic_wrapper_class():
+    base = T.frozen_wrapper_class()
+
+    class HighPrecisionDiagnosticEvaluation(base):
+        """Experiment-local profile precision; deployment behavior is unchanged."""
+
+        @classmethod
+        def _tensor_list(cls, tensor, digits=9):
+            return super()._tensor_list(tensor, digits=digits)
+
+        @classmethod
+        def _array_list(cls, array, digits=9):
+            return super()._array_list(array, digits=digits)
+
+    return HighPrecisionDiagnosticEvaluation
 
 
 def exact_value_equal(left: Any, right: Any) -> bool:
@@ -509,6 +547,8 @@ def run_intervention(
     torch.save(fresh, fresh_path)
     paired_rng = B.snapshot_rng()
     paired_rng_digest = B.rng_digest(paired_rng)
+    canonical_first_policy_input_sha256 = value_digest(branchpoint)
+    first_policy_observation_source = "captured_common_prefix_branchpoint"
 
     wrappers = {}
     condition_audits = {}
@@ -563,8 +603,9 @@ def run_intervention(
             mask_before = active_voter_info(wrapper.action_buffer_mask)
             buffer_nonzero_before = int(np.count_nonzero(wrapper.action_buffer))
             global_step = age + j
+            policy_obs = T.dataset_observation(branchpoint) if j == 0 else branch_obs
             action = np.asarray(
-                wrapper.step(branch_obs, str(anchor["instruction"]), global_step), dtype=np.float32
+                wrapper.step(policy_obs, str(anchor["instruction"]), global_step), dtype=np.float32
             ).reshape(ACTION_DIM)
             profile = profile_json(dict(wrapper.last_step_profile))
             if profile["slow_system"]:
@@ -585,6 +626,10 @@ def run_intervention(
                 "condition_id": condition_id, "task": anchor["task"],
                 "intervention_age": age, "branch": branch, "post_step": j,
                 "global_step": global_step, "dp_action_first": profile["dp_action_first"],
+                "policy_observation_source": (
+                    first_policy_observation_source if j == 0 else "previous_env_step_return"
+                ),
+                "policy_observation_sha256": value_digest(T.capture_env_state(policy_obs)),
                 "raw_action_prediction": profile["raw_action_prediction"],
                 "executed_action": action.tolist(),
                 "aggregation_delta_ee6": profile["aggregation_delta_ee6"],
@@ -604,6 +649,15 @@ def run_intervention(
             "successes": successes, "first_success": first_success,
         }
 
+    first_policy_input_hashes = {
+        branch: step_rows_by_key[(branch, 0)]["policy_observation_sha256"]
+        for branch in BRANCHES
+    }
+    if set(first_policy_input_hashes.values()) != {canonical_first_policy_input_sha256}:
+        raise AssertionError(
+            f"Canonical first policy observation mismatch: {first_policy_input_hashes}"
+        )
+
     raw_equality = {}
     flush_aggregation = {}
     for condition in CONDITIONS:
@@ -619,8 +673,6 @@ def run_intervention(
             "gripper_abs_delta": float(delta[-1]),
             "atol": RAW_EQUALITY_ATOL, "rtol": RAW_EQUALITY_RTOL,
         }
-        if not passed:
-            raise AssertionError(f"Same-condition keep/flush raw-action equality failed: {raw_equality}")
         raw_prediction = np.asarray(flush_profile["raw_action_prediction"], dtype=np.float64)
         action_prediction = np.asarray(flush_profile["action_prediction"], dtype=np.float64)
         ee6_delta = float(np.linalg.norm(raw_prediction[:6] - action_prediction[:6]))
@@ -638,8 +690,38 @@ def run_intervention(
             "aggregation_delta_ee6": aggregation_delta, "atol": FLUSH_AGGREGATION_ATOL,
             "first_step_active_voters": first_voters, "buffer_empty_before_step": buffer_empty_before,
         }
-        if not flush_passed:
-            raise AssertionError(f"First-step flush aggregation invariant failed: {flush_aggregation}")
+
+    raw_ok = all(value["passed"] for value in raw_equality.values())
+    flush_ok = all(value["passed"] for value in flush_aggregation.values())
+    if not raw_ok or not flush_ok:
+        failure_path = run_dir / f"preflight_failure_{condition_id}_age_{age}.json"
+        failure = {
+            "condition_id": condition_id, "intervention_age": age,
+            "failed_invariants": {
+                "raw_action_equality": not raw_ok,
+                "flush_aggregation": not flush_ok,
+            "first_policy_observation_source": first_policy_observation_source,
+            "canonical_first_policy_input_sha256": canonical_first_policy_input_sha256,
+            "first_policy_input_hashes": first_policy_input_hashes,
+            },
+            "raw_action_equality_audits": raw_equality,
+            "flush_aggregation_audits": flush_aggregation,
+            "first_dp_action_by_branch": {
+                branch: branch_results[branch]["profiles"][0]["dp_action_first"]
+                for branch in BRANCHES
+            },
+            "branch_order": branch_order, "paired_rng": paired_rng_digest,
+            "deterministic_execution": getattr(args, "_determinism", None),
+            "reset_records": reset_records,
+            "reset_pairwise": B.reset_pairwise(reset_states),
+            "condition_audits": condition_audits,
+            "flush_isolation_audits": isolation,
+        }
+        B.write_json(failure_path, failure)
+        raise AssertionError(
+            f"Hard first-step preflight failed for {condition_id} age={age}; "
+            f"diagnostics={failure_path}; raw={raw_equality}; flush={flush_aggregation}"
+        )
 
     mechanism = {}
     for condition in ("ref", "full"):
@@ -743,6 +825,7 @@ def run_intervention(
         "uniform_branch_reset": len({row["restore_method"] for row in reset_records}) == 1,
         "reset_fidelity_recorded": len(reset_records) == 6 and len(pairwise_resets) == 15,
         "paired_rng_restored": True,
+        "canonical_first_policy_observation_shared": len(set(first_policy_input_hashes.values())) == 1,
         "no_post_intervention_generalist_call": all(
             not profile["slow_system"] for result in branch_results.values() for profile in result["profiles"]
         ),
@@ -766,6 +849,9 @@ def run_intervention(
         "fresh_condition_file": fresh_path.relative_to(run_dir).as_posix(),
         "fresh_inference_call_id": fresh["fresh_inference_call_id"], "fresh_calls": 1,
         "fresh_condition_fingerprint_sha256": fresh["provenance"]["condition_fingerprint_sha256"],
+        "first_policy_observation_source": first_policy_observation_source,
+        "canonical_first_policy_input_sha256": canonical_first_policy_input_sha256,
+        "first_policy_input_hashes": first_policy_input_hashes,
         "branch_order": branch_order, "paired_rng": paired_rng_digest,
         "condition_difference": B.condition_difference(old_condition, fresh),
         "condition_effect_transmission": mechanism,
@@ -815,7 +901,7 @@ def initial_manifest(args, source_manifest, source_audit, anchors, status, check
         "controller_snapshot_fields": list(SNAPSHOT_FIELDS),
         "paired_rng_contract": "snapshot Torch CPU and every CUDA RNG after the one fresh call; restore immediately before every branch rollout",
         "branch_order_contract": "deterministically shuffled per (seed, condition_id, intervention_age)",
-        "reset_contract": "all six branches use env.reset(robot_obs=captured_robot_obs, scene_obs=captured_scene_obs)",
+        "reset_contract": "all six branches restore with env.reset(robot_obs=captured_robot_obs, scene_obs=captured_scene_obs); because CALVIN reset rendering is not bit-exact, the first specialist call uses an independent copy of the captured canonical branchpoint observation in every branch; later calls use each branch's env.step observation",
         "generalist_call_contract": "exactly one do_sample=False call per anchor-age; same-call action and hidden shared by all branches; no later call",
         "model_evaluator_settings": {
             "fast_num_inference_steps": 10, "with_depth": True, "with_gripper": True,
@@ -831,6 +917,7 @@ def initial_manifest(args, source_manifest, source_audit, anchors, status, check
         },
         "checkpoint_loading": checkpoint_audit, "preflight_results": preflight,
         "same_index_expert_proximity_interpretation": "descriptive only; the persisted expert trajectory is not a unique optimal recovery trajectory after policy-induced drift",
+        "deterministic_execution": getattr(args, "_determinism", {"configured": False}),
         "software": {"python": platform.python_version(), "numpy": np.__version__},
     }
 
@@ -853,6 +940,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     }
     if not all(loader_contract.values()):
         raise ValueError(f"Generalist loader differs from the completed source contract: {loader_contract}")
+    args._determinism = (
+        {"configured": False, "reason": "dry_run"}
+        if args.dry_run else {"configured": True, **configure_torch_determinism()}
+    )
     source_manifest, source_anchors, source_audit = B.validate_source(args)
     if args.source_run_dir != CANONICAL_SOURCE_RUN.resolve():
         raise ValueError(
@@ -903,7 +994,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise RuntimeError("Loaded generalist fingerprint differs from source")
     task_oracle, task_oracle_path = B.make_task_oracle(args.dataset_root)
     env = T.make_env(args._index, args.use_egl)
-    wrapper_type = T.frozen_wrapper_class()
+    wrapper_type = diagnostic_wrapper_class()
     interventions, branch_rows, branch_steps = [], [], []
     reset_records, reset_pairwise_rows, preflight_results = [], [], []
     fresh_calls = 0
@@ -929,7 +1020,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 preflight_results.append(record["preflight_checks"])
             print(f"[{anchor_i + 1}/{len(selected)}] {anchor['condition_id']} complete", flush=True)
     finally:
-        env.close()
+        try:
+            env.close()
+        finally:
+            underlying_env = getattr(env, "unwrapped", None)
+            if underlying_env is not None and hasattr(underlying_env, "cid"):
+                underlying_env.cid = -1
     expected_calls = len(selected) * len(args.intervention_ages)
     if fresh_calls != expected_calls:
         raise AssertionError(f"fresh generalist calls {fresh_calls} != expected {expected_calls}")

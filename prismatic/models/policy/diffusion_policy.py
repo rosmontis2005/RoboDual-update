@@ -27,6 +27,7 @@ class DiffusionDiTImagePolicy(nn.Module):
             vision_encoder_pretrained=True,
             cond_drop_chance=0.,
             progressive_noise=False,
+            use_ref_validity=False,
             # parameters passed to step
             **kwargs):
         super().__init__()
@@ -40,6 +41,7 @@ class DiffusionDiTImagePolicy(nn.Module):
         self.with_cfg = True if cond_drop_chance > 0 else False
         self.guidance_scale = 3
         self.progressive_noise = progressive_noise
+        self.use_ref_validity = bool(use_ref_validity)
 
         # create diffusion model
         model = DiT_Tiny_STA(
@@ -52,6 +54,7 @@ class DiffusionDiTImagePolicy(nn.Module):
                     with_gripper=with_gripper, 
                     with_tactile=with_tactile, 
                     with_hist_action_num=0,
+                    use_ref_validity=self.use_ref_validity,
         )
 
         encoder_embed_size = model.hidden_size if model.hidden_size == 256 else 384
@@ -99,6 +102,7 @@ class DiffusionDiTImagePolicy(nn.Module):
     # ========= inference  ============
     def conditional_sample(self, condition_data, hist_action=None,
             local_cond=None, global_cond=None, lang=None, proprio=None,
+            ref_valid_mask=None,
             generator=None,
             # keyword arguments to scheduler.step
             **kwargs
@@ -127,7 +131,8 @@ class DiffusionDiTImagePolicy(nn.Module):
                                  gripper_embedding = (global_cond[3], global_cond[4]) if self.with_gripper else None,
                                  lang=lang, 
                                  hist_action=hist_action,
-                                 proprio=proprio)
+                                 proprio=proprio,
+                                 ref_valid_mask=ref_valid_mask)
             
             if self.with_cfg:
                 cond_mask = torch.zeros(trajectory.shape[0], 1,  device = trajectory.device).float()
@@ -139,7 +144,8 @@ class DiffusionDiTImagePolicy(nn.Module):
                                  lang=lang, 
                                  hist_action=hist_action,
                                  proprio=proprio,
-                                 cond_mask = cond_mask)
+                                 cond_mask = cond_mask,
+                                 ref_valid_mask=ref_valid_mask)
                 model_output = model_output_uncond + self.guidance_scale * (model_output - model_output_uncond)
 
             # compute previous action: x_t -> x_t-1
@@ -152,7 +158,7 @@ class DiffusionDiTImagePolicy(nn.Module):
         return trajectory
 
 
-    def predict_action(self, ref_action, action_cond, obs, depth_obs=None, gripper_obs=None, tactile_obs=None, lang=None, proprio=None, hist_action=None) -> Dict[str, torch.Tensor]:
+    def predict_action(self, ref_action, action_cond, obs, depth_obs=None, gripper_obs=None, tactile_obs=None, lang=None, proprio=None, hist_action=None, ref_valid_mask=None) -> Dict[str, torch.Tensor]:
         """
         obs_dict: must include "obs" key
         result: must include "action" key
@@ -215,6 +221,7 @@ class DiffusionDiTImagePolicy(nn.Module):
             hist_action=hist_action,
             lang=lang,
             proprio=proprio,
+            ref_valid_mask=ref_valid_mask,
             **self.kwargs)
         
 
@@ -244,6 +251,7 @@ class DiffusionDiTImagePolicy(nn.Module):
         noise=None,
         timesteps=None,
         cond_mask=None,
+        ref_valid_mask=None,
         return_details=False,
     ):
         batch_size = trajectory.shape[0]
@@ -324,7 +332,8 @@ class DiffusionDiTImagePolicy(nn.Module):
                           lang=lang,
                           proprio=proprio,
                           hist_action=hist_action,
-                          cond_mask=cond_mask)
+                          cond_mask=cond_mask,
+                          ref_valid_mask=ref_valid_mask)
 
 
         pred_type = self.noise_scheduler.config.prediction_type 

@@ -110,6 +110,8 @@ The run fails loudly unless all of the following hold:
 - keep/flush runtime independence and exact flush isolation;
 - identical Torch CPU/all-CUDA RNG restoration before each branch;
 - uniform `env.reset(robot_obs=..., scene_obs=...)` branchpoint restoration;
+- one value-identical captured branchpoint observation, verified by SHA-256,
+  is used as the first specialist input in all six branches;
 - same-condition keep/flush first raw specialist outputs equal with
   `atol=rtol=1e-6`, including EE6 and gripper deltas;
 - every flush branch has first-step `aggregation_delta_ee6 <= 1e-6`, with raw
@@ -122,6 +124,25 @@ The run fails loudly unless all of the following hold:
 Branch execution order is deterministically shuffled from
 `(seed, condition_id, intervention_age)`. The six simulator branches share the
 same captured branchpoint and each restores the same paired RNG state.
+
+CALVIN's required `env.reset(robot_obs=..., scene_obs=...)` path does not return
+bit-identical rendered observations on repeated resets: tiny scene differences
+and occasional RGB differences are retained in `reset_fidelity.json`. To keep
+the first-step raw-action equality test causally about the temporal buffer, the
+first specialist call in every branch consumes an independent copy of the
+captured common-prefix branchpoint observation. The action is still applied to
+that branch's reset simulator via `env.step(action.copy())`; all later policy
+steps consume the real observation returned by the preceding `env.step`.
+
+GPU runs also enable strict deterministic Torch algorithms, deterministic
+cuDNN, and `CUBLAS_WORKSPACE_CONFIG=:4096:8` before model loading. The
+experiment-local wrapper records raw action diagnostics to nine decimal places;
+this changes profiling precision only, not evaluator actions. The `1e-6`
+raw-equality tolerance is intentionally unchanged. If raw equality or flush
+aggregation still fails, the run writes
+`preflight_failure_<condition_id>_age_<age>.json` with raw values, branch order,
+RNG provenance, reset fidelity, condition/isolation audits, and deterministic
+runtime settings before raising.
 
 ## Outputs
 
@@ -136,6 +157,8 @@ Each non-dry run writes a new, non-overwritable run directory containing:
   audits, and branch outcomes;
 - `branch_steps.jsonl`: raw `dp_action_first`, raw aggregate prediction,
   executed action, aggregation delta, voter masks/counts, gripper sign,
+- `preflight_failure_*.json`: emitted only on a hard first-step invariant
+  failure so the numerical/reset context survives the exception;
   per-step success, paired action/state differences, and descriptive expert
   proximity;
 - `branch_summary.csv`: per-age/branch descriptive outcome summaries;
